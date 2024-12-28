@@ -6,6 +6,7 @@ import express, { Express } from "express";
 import auth from '../routes/auth';
 import locations from '../routes/locations';
 import profile from '../routes/profile';
+import seed from '../routes/seed';
 import services from '../routes/services';
 import users from '../routes/users';
 
@@ -22,6 +23,7 @@ function registerRoutes(app: Express) {
     app.use('/api/v1/auth', auth);
     app.use('/api/v1/locations', locations);
     app.use('/api/v1/profile', profile);
+    app.use('/api/v1/seed', seed);
     app.use('/api/v1/services', services);
     app.use('/api/v1/users', users);
 

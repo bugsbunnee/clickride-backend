@@ -133,8 +133,6 @@ export interface ICarPersonalInformation {
 }
 
 export interface IBusPersonalInformation {
-    firstName: string;
-    lastName: string;
     companyName: string;
     companyLogo: string;
 }
@@ -152,7 +150,8 @@ export interface IVehicleDocuments {
 }
 
 export interface IProfile {
-    personalInformation: ICarPersonalInformation | IBusPersonalInformation;
+    carPersonalInformation: ICarPersonalInformation;
+    busPersonalInformation: IBusPersonalInformation;
     paymentDetails: IPaymentDetails;
     vehicleDocuments: IVehicleDocuments;
     tripDetails: ITripDetails[];

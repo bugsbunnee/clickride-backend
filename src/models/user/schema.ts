@@ -2,10 +2,9 @@ import mongoose from "mongoose";
 import moment from "moment";
 import _ from "lodash";
 
-import { ICarPersonalInformation, ICoordinates, IDriver, IPaymentDetails, IUser, IUserMethods, IProfile, IVehicleDocuments, ITripDetails, IRouteDetails } from "./types";
+import { ICarPersonalInformation, ICoordinates, IDriver, IPaymentDetails, IUser, IUserMethods, IProfile, IVehicleDocuments, ITripDetails, IRouteDetails, IBusPersonalInformation } from "./types";
 import { generateRandomCode, generateRandomToken, signPayload } from "../../utils/lib";
 import { EXPIRY_TIME_IN_MINUTES, GENDER_OPTIONS, SAMPLE_SIZES } from "../../utils/constants";
-import { AVAILABLE_SERVICE_TYPES } from "../../utils/data";
 
 interface UserModel extends mongoose.Model<IUser, {}, IUserMethods> {}
 
@@ -22,13 +21,18 @@ const PaymentDetailsSchema = new mongoose.Schema<IPaymentDetails>({
     bankName: { type: String, required: true },
 });
 
-const PersonalInformationSchema = new mongoose.Schema<ICarPersonalInformation>({
+const CarPersonalInformationSchema = new mongoose.Schema<ICarPersonalInformation>({
     gender: { type: String, enum: GENDER_OPTIONS, required: true },
     isVehicleOwner: { type: Boolean, require: true },
     vehicleManufacturer: { type: String, required: true },
     vehicleYear: { type: Number, min: 1990, required: true },
     vehicleColor: { type: String, required: true },
     vehicleLicensePlate: { type: String, trim: true, required: true },
+});
+
+const BusPersonalInformationSchema = new mongoose.Schema<IBusPersonalInformation>({
+    companyName: { type: String, trim: true, required: true },
+    companyLogo: { type: String, trim: true, required: true },
 });
 
 const VehicleDocumentsSchema = new mongoose.Schema<IVehicleDocuments>({
@@ -63,7 +67,8 @@ const RouteDetailsSchema = new mongoose.Schema<IRouteDetails>({
 });
 
 const ProfileSchema = new mongoose.Schema<IProfile>({
-    personalInformation: PersonalInformationSchema,
+    carPersonalInformation: CarPersonalInformationSchema,
+    busPersonalInformation: BusPersonalInformationSchema,
     paymentDetails: PaymentDetailsSchema,
     vehicleDocuments: VehicleDocumentsSchema,
     tripDetails: [TripDetailsSchema],

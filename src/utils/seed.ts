@@ -1,5 +1,6 @@
 import { Service } from "../models/services/schema";
 import { IService } from "../models/services/types";
+import { Driver, User } from "../models/user/schema";
 import { ServiceCode } from "./constants";
 
 import logger from "../startup/logger";
@@ -37,7 +38,9 @@ const createServices = async () => {
 };
 
 const drop = async () => {
-   await Service.deleteMany();
+    await User.deleteMany();
+    await Driver.deleteMany();
+    await Service.deleteMany();
 };
 
 const populate = async () => {

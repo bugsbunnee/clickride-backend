@@ -30,7 +30,7 @@ const documentsUpload = upload.fields([
 router.put('/car/personal-information', [authDriver, validateService(ServiceCode.CAR), validateWith(carPersonalInformationSchema)], async (req: Request, res: Response): Promise<any> => {
     const driver = await Driver.findByIdAndUpdate(req.driver!._id, {
         $set: {
-            'profile.personalInformation': {
+            'profile.carPersonalInformation': {
                 gender: req.body.gender,
                 isVehicleOwner: req.body.isVehicleOwner,
                 vehicleManufacturer: req.body.vehicleManufacturer,
@@ -67,7 +67,7 @@ router.put('/bus/personal-information', [authDriver, validateService(ServiceCode
 
     const driver = await Driver.findByIdAndUpdate(req.driver!._id, {
         $set: {
-            'profile.personalInformation': {
+            'profile.busPersonalInformation': {
                 companyName: req.body.companyName,
                 companyLogo: validation.fileUrl,
             }

@@ -4,7 +4,7 @@ import { Service } from "../models/services/schema";
 import { ServiceCode } from "../utils/constants";
 
 const validateService = (serviceCode: ServiceCode) => {
-    return (req: Request, res: Response, next: NextFunction) => {
+    return async (req: Request, res: Response, next: NextFunction) => {
         if (!req.driver) {
             return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User profile not found!' });
         }
