@@ -3,8 +3,8 @@ import mongoose from 'mongoose';
 import { isValidPhoneNumber } from 'libphonenumber-js';
 import { z } from 'zod';
 
-import { Gender, GENDER_OPTIONS, MIN_CAR_YEAR, PASSWORD_CHECK_REGEX, VehicleType } from '../../utils/constants';
-import { AVAILABLE_SERVICE_TYPES } from '../../utils/data';
+import { Gender, GENDER_OPTIONS, MIN_CAR_YEAR, PASSWORD_CHECK_REGEX } from '../../utils/constants';
+import { getObjectIdIsValid } from '../../utils/lib';
 
 export const vehicleDocumentsSchema = z.object({
     license: z.array(z.any()).min(1, 'License must be at least 1 photo'),
@@ -39,7 +39,7 @@ export const driverRegistrationSchema = z.object({
     }),
     city: z.string().min(1, 'City must be at least one character long'),
     password: z.string().regex(PASSWORD_CHECK_REGEX, "Password must have at least 1 uppercase letter, 1 lowercase letter, 1 special character, 1 numeric character, and be at least 8 characters long."),
-    service: z.enum(AVAILABLE_SERVICE_TYPES as any),
+    service: z.string().refine((value) => getObjectIdIsValid(value), 'Invalid service'),
 });
 
 export const carPersonalInformationSchema = z.object({
@@ -57,6 +57,11 @@ export const busPersonalInformationSchema = z.object({
     firstName: z.string(),
     lastName: z.string(),
     companyName: z.string(),
+});
+
+export const localPersonalInformationSchema = z.object({
+    firstName: z.string(),
+    lastName: z.string(),
 });
 
 export const paymentDetailsSchema = z.object({
@@ -81,9 +86,15 @@ export const tripDetailsSchema = z.object({
     airConditioning: z.boolean(),
 });
 
+export const routeDetailsSchema = z.object({
+    price: z.number().positive(),
+    routes: z.array(z.string()).min(1),
+});
+
 export type ICoordinates = z.infer<typeof locationCoordinatesSchema>;
 export type IPaymentDetails = z.infer<typeof paymentDetailsSchema>;
 export type ITripDetails = z.infer<typeof tripDetailsSchema>;
+export type IRouteDetails = z.infer<typeof routeDetailsSchema>;
 
 export interface IUser {
     _id: mongoose.Types.ObjectId;
@@ -107,8 +118,9 @@ export interface IUser {
 export interface IDriver {
     _id: mongoose.Types.ObjectId;
     user: mongoose.Types.ObjectId;
-    service: VehicleType;
-    profile?: IProfileSchema;
+    rating: number;
+    service: mongoose.Types.ObjectId;
+    profile?: IProfile;
 }
 
 export interface ICarPersonalInformation {
@@ -139,11 +151,13 @@ export interface IVehicleDocuments {
     lasdri: string;
 }
 
-export interface IProfileSchema {
+export interface IProfile {
     personalInformation: ICarPersonalInformation | IBusPersonalInformation;
     paymentDetails: IPaymentDetails;
     vehicleDocuments: IVehicleDocuments;
     tripDetails: ITripDetails[];
+    routeDetails: IRouteDetails[];
+    profilePhotoUrl?: string;
     inspectionUrl?: string;
 }
 

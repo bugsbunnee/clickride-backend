@@ -4,11 +4,10 @@ import bcrypt from 'bcrypt';
 
 import { StatusCodes } from 'http-status-codes';
 import { Driver } from '../models/user/schema';
-import { authSchema, IUser } from '../models/user/types';
+import { authSchema } from '../models/user/types';
 import { generateDriverSession } from '../controllers/user.controller';
 
 import validateWith from '../middleware/validateWith';
-
 
 const router = express.Router();
 
@@ -37,6 +36,17 @@ router.post('/driver/login', [validateWith(authSchema)], async (req: Request, re
             $unwind: '$user'
         },
         {
+            $lookup: {
+                from: 'services',
+                foreignField: '_id',
+                localField: 'service',
+                as: 'service',
+            },
+        },
+        {
+            $unwind: '$service'
+        },
+        {
             $match: { 'user.email': req.body.email }
         }
     ]);
@@ -50,7 +60,7 @@ router.post('/driver/login', [validateWith(authSchema)], async (req: Request, re
 
     if (!validPassword) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid credentials!' });
 
-    res.json(generateDriverSession({ driver, user: driver.user }));
+    res.json(generateDriverSession({ driver, service: driver.service,  user: driver.user }));
 });
 
 export default router;

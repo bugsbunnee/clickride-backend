@@ -9,6 +9,15 @@ interface StatesResponse {
     }
 }
 
+interface CitiesResponse {
+    data: string[];
+}
+
+interface CitiesPayload {
+    state: string, 
+    country: string
+}
+
 export const getStatesInCountry = async (country: string) => {
     try {
         const endpoint = process.env.COUNTRIES_API_URL + '/countries/states';
@@ -20,6 +29,24 @@ export const getStatesInCountry = async (country: string) => {
         }));
     } catch (error) {
         logger.error(error);
+
+        return [];
+    }
+};
+
+export const getCitiesInState = async (payload: CitiesPayload) => {
+    try {
+        const endpoint = process.env.COUNTRIES_API_URL + '/countries/state/cities';
+        console.log(payload)
+        const response = await axios.post<CitiesResponse>(endpoint, payload);
+
+        return response.data.data.map((city) => ({
+            label: city,
+            value: city
+        }));
+    } catch (error) {
+        console.log(error)
+        // logger.error(error);
 
         return [];
     }

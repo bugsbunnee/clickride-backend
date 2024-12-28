@@ -14,12 +14,13 @@ export enum Gender {
     FEMALE = 'Female'
 };
 
-export enum VehicleType {
+export enum ServiceCode {
     CAR = 'car',
     BUS = 'bus',
     LOCAL = 'local',
 }
 
+export const SERVICE_CODES = Object.values(ServiceCode);
 export const GENDER_OPTIONS = Object.values(Gender);
 export const MB_IN_BYTES = 1_048_576;
 export const MIN_CAR_YEAR = 1990;

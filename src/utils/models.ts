@@ -1,12 +1,13 @@
 import mongoose from 'mongoose';
-import { IProfileSchema, IUser } from '../models/user/types';
-import { VehicleType } from './constants';
+import { IProfile, IUser } from '../models/user/types';
+import { IService } from '../models/services/types';
 
 export interface DriverSession {
     _id: mongoose.Types.ObjectId;
-    service: VehicleType
+    service: IService;
+    rating: number;
     user: IUser;
-    profile?: IProfileSchema;
+    profile?: IProfile;
 };
 
 export interface PickerOption {

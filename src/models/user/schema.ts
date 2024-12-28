@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import moment from "moment";
 import _ from "lodash";
 
-import { ICarPersonalInformation, ICoordinates, IDriver, IPaymentDetails, IUser, IUserMethods, IProfileSchema, IVehicleDocuments, ITripDetails } from "./types";
+import { ICarPersonalInformation, ICoordinates, IDriver, IPaymentDetails, IUser, IUserMethods, IProfile, IVehicleDocuments, ITripDetails, IRouteDetails } from "./types";
 import { generateRandomCode, generateRandomToken, signPayload } from "../../utils/lib";
 import { EXPIRY_TIME_IN_MINUTES, GENDER_OPTIONS, SAMPLE_SIZES } from "../../utils/constants";
 import { AVAILABLE_SERVICE_TYPES } from "../../utils/data";
@@ -13,7 +13,12 @@ const PaymentDetailsSchema = new mongoose.Schema<IPaymentDetails>({
     billingType: { type: String, required: true },
     address: { type: String, required: true },
     accountName: { type: String, required: true },
-    accountNumber: { type: String, minlength: 10, required: true, unique: true },
+    accountNumber: { type: String, minlength: 10, required: true, trim: true, index: {
+        unique: true,
+        partialFilterExpression: { 
+            accountNumber: { $type: "string" }
+        }
+    } },
     bankName: { type: String, required: true },
 });
 
@@ -23,7 +28,7 @@ const PersonalInformationSchema = new mongoose.Schema<ICarPersonalInformation>({
     vehicleManufacturer: { type: String, required: true },
     vehicleYear: { type: Number, min: 1990, required: true },
     vehicleColor: { type: String, required: true },
-    vehicleLicensePlate: { type: String, trim: true, unique: true, required: true },
+    vehicleLicensePlate: { type: String, trim: true, required: true },
 });
 
 const VehicleDocumentsSchema = new mongoose.Schema<IVehicleDocuments>({
@@ -52,11 +57,18 @@ const TripDetailsSchema = new mongoose.Schema<ITripDetails>({
     airConditioning: { type: Boolean, required: true },
 });
 
-const ProfileSchema = new mongoose.Schema<IProfileSchema>({
+const RouteDetailsSchema = new mongoose.Schema<IRouteDetails>({
+    routes: [{ type: String, required: true }],
+    price: { type: Number, required: true },
+});
+
+const ProfileSchema = new mongoose.Schema<IProfile>({
     personalInformation: PersonalInformationSchema,
     paymentDetails: PaymentDetailsSchema,
     vehicleDocuments: VehicleDocumentsSchema,
     tripDetails: [TripDetailsSchema],
+    routeDetails: RouteDetailsSchema,
+    profilePhotoUrl: { type: String, required: false },
     inspectionUrl: { type: String, required: false },
 }, { timestamps: true });
 
@@ -85,7 +97,8 @@ const UserSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
 
 const DriverSchema = new mongoose.Schema<IDriver>({
     user: { type: mongoose.Schema.ObjectId, unique: true, required: true, ref: 'User' },
-    service: { type: String, enum: AVAILABLE_SERVICE_TYPES, required: true },
+    service: { type: mongoose.Schema.ObjectId, ref: 'Service', required: true },
+    rating: { type: Number, min: 0, default: 0 },
     profile: ProfileSchema,
 }, { timestamps: true });
 

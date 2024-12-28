@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
+import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 
@@ -26,6 +27,10 @@ export const generateRandomToken = () => {
 
 export const generateRandomCode = (digitLength: number, sampleSize: string = SAMPLE_SIZES.ALPHANUMERIC) => {
     return _.sampleSize(sampleSize.split(''), digitLength).join('');
+};
+
+export const getObjectIdIsValid = (objectId: string) => {
+    return mongoose.Types.ObjectId.isValid(objectId);
 };
 
 export const hashPassword = async (password: string) => {

@@ -6,6 +6,7 @@ import { Driver, User } from '../models/user/schema';
 import { deviceTokenSchema, driverRegistrationSchema, locationCoordinatesSchema } from '../models/user/types';
 import { hashPassword } from '../utils/lib';
 import { generateDriverSession } from '../controllers/user.controller';
+import { Service } from '../models/services/schema';
 
 import validateWith from '../middleware/validateWith';
 import authUser from '../middleware/authUser';
@@ -14,6 +15,12 @@ import authDriver from '../middleware/authDriver';
 const router = express.Router();
 
 router.post('/driver', [validateWith(driverRegistrationSchema)], async (req: Request, res: Response): Promise<any> => {
+    const service = await Service.findById(req.body.service);
+    
+    if (!service) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid service provided' });
+    }
+
     const results = await Driver.aggregate([
         {
             $lookup: {
@@ -59,11 +66,12 @@ router.post('/driver', [validateWith(driverRegistrationSchema)], async (req: Req
     });
 
     const driver = await Driver.create({
-        service: req.body.service,
+        rating: 0,
+        service: service._id,
         user: user._id,
     });
 
-    res.status(StatusCodes.CREATED).json(generateDriverSession({ driver, user }));
+    res.status(StatusCodes.CREATED).json(generateDriverSession({ driver, service, user }));
 });
 
 router.patch('/me/location', [authDriver, validateWith(locationCoordinatesSchema)], async (req: Request, res: Response): Promise<any> => {
@@ -91,7 +99,7 @@ router.patch('/me/token', [authUser, validateWith(deviceTokenSchema)], async (re
     if (!user) {
         return res.status(StatusCodes.NOT_FOUND).json({
             message: 'Invalid user provided',
-        })
+        });
     }
 
     return res.status(StatusCodes.OK).json({ message: 'Device token updated successfully!' });
