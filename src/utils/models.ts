@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import { IProfile, IUser } from '../models/user/types';
 import { IService } from '../models/services/types';
+import { LocationType } from './constants';
 
 export interface DriverSession {
     _id: mongoose.Types.ObjectId;
@@ -14,4 +15,25 @@ export interface PickerOption {
     label: string;
     value: string | number;
     image?: string;
+}
+
+export interface Location {
+    type: LocationType;
+    coordinates: [number, number];
+}
+
+export interface RiderForMap {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    profileDisplayImage: string;
+    serviceDisplayImage: string;
+    timeToLocation: string;
+    distanceToLocation: string;
+    rating: number;
+    price: number;
+    coordinates: {
+        longitude: number;
+        latitude: number;
+    };
 }

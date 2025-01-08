@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 import moment from "moment";
 import _ from "lodash";
 
-import { ICarPersonalInformation, ICoordinates, IDriver, IPaymentDetails, IUser, IUserMethods, IProfile, IVehicleDocuments, ITripDetails, IRouteDetails, IBusPersonalInformation } from "./types";
+import { ICarPersonalInformation, IDriver, IPaymentDetails, IUser, IUserMethods, IProfile, IVehicleDocuments, ITripDetails, IRouteDetails, IBusPersonalInformation } from "./types";
 import { generateRandomCode, generateRandomToken, signPayload } from "../../utils/lib";
-import { EXPIRY_TIME_IN_MINUTES, GENDER_OPTIONS, SAMPLE_SIZES } from "../../utils/constants";
+import { EXPIRY_TIME_IN_MINUTES, GENDER_OPTIONS, LOCATION_TYPES, SAMPLE_SIZES } from "../../utils/constants";
 
 interface UserModel extends mongoose.Model<IUser, {}, IUserMethods> {}
 
@@ -50,6 +50,8 @@ const VehicleDocumentsSchema = new mongoose.Schema<IVehicleDocuments>({
 const TripDetailsSchema = new mongoose.Schema<ITripDetails>({
     origin: { type: String, required: true },
     destination: { type: String, required: true },
+    originCity: { type: String, required: true },
+    destinationCity: { type: String, required: true },
     price: { type: Number, required: true },
     isRoundTrip: { type: Boolean, required: true },
     departureDates: [{ type: Number, min: 0 }],
@@ -77,27 +79,26 @@ const ProfileSchema = new mongoose.Schema<IProfile>({
     inspectionUrl: { type: String, required: false },
 }, { timestamps: true });
 
-const CoordinatesSchema = new mongoose.Schema<ICoordinates>({
-    latitude: { type: Number, required: true },
-    longitude: { type: Number, required: true },
-});
-
 const UserSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     firstName: { type: String },
     lastName: { type: String },
-    email: { type: String, required: true, unique: true },
+    email: { type: String, required: true, trim: true, unique: true },
     deviceToken: { type: String, required: false },
     phoneNumber: { type: String, required: false, minlength: 5, unique: true },
     city: { type: String, required: false, },
     password: { type: String, required: true },
     lastLogin: { type: Date,  default: null },
+    profilePhoto: { type: String, required: false },
     isEmailVerified: { type: Boolean, default: false },
     emailVerificationToken: { type: String, default: null },
     emailVerificationTokenExpiryDate: { type: Date, default: null },
     emailVerifiedAt: { type: Date, default: null },
     passwordResetToken: { type: String, default: null },
     passwordResetTokenExpiryDate: { type: Date, default: null },
-    coords: CoordinatesSchema,
+    location: {
+        type: { type: String, enum: LOCATION_TYPES },
+        coordinates: { type: [Number] },
+    },
 }, { timestamps: true });
 
 const DriverSchema = new mongoose.Schema<IDriver>({
@@ -106,6 +107,8 @@ const DriverSchema = new mongoose.Schema<IDriver>({
     rating: { type: Number, min: 0, default: 0 },
     profile: ProfileSchema,
 }, { timestamps: true });
+
+UserSchema.index({ location: '2dsphere' });
 
 UserSchema.method('generateAuthToken', function () {
     return signPayload({
@@ -116,7 +119,7 @@ UserSchema.method('generateAuthToken', function () {
         phoneNumber: this.phoneNumber,
         isEmailVerified: this.isEmailVerified,
         deviceToken: this.deviceToken,
-        coords: this.coords,
+        location: this.location,
     });
 });
 

@@ -210,6 +210,8 @@ router.put('/trip-details', [authDriver, validateService(ServiceCode.BUS), valid
         driver.profile.tripDetails.push({
             origin: req.body.origin,
             destination: req.body.destination,
+            originCity: req.body.originCity,
+            destinationCity: req.body.destinationCity,
             price: req.body.price,
             isRoundTrip: req.body.isRoundTrip,
             departureDates: req.body.departureDates,
@@ -227,6 +229,8 @@ router.put('/trip-details', [authDriver, validateService(ServiceCode.BUS), valid
                 {
                     origin: req.body.origin,
                     destination: req.body.destination,
+                    originCity: req.body.originCity,
+                    destinationCity: req.body.destinationCity,
                     price: req.body.price,
                     isRoundTrip: req.body.isRoundTrip,
                     departureDates: req.body.departureDates,

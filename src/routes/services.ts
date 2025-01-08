@@ -16,4 +16,9 @@ router.get('/driver', async (req: Request, res: Response) => {
     res.json(services);
 });
 
+router.get('/user', async (req: Request, res: Response) => {
+    let services = await Service.find();
+    res.json(services);
+});
+
 export default router;

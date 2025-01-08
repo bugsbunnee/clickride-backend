@@ -5,6 +5,7 @@ import { z } from 'zod';
 
 import { Gender, GENDER_OPTIONS, MIN_CAR_YEAR, PASSWORD_CHECK_REGEX } from '../../utils/constants';
 import { getObjectIdIsValid } from '../../utils/lib';
+import { Location } from '../../utils/models';
 
 export const vehicleDocumentsSchema = z.object({
     license: z.array(z.any()).min(1, 'License must be at least 1 photo'),
@@ -30,16 +31,6 @@ export const deviceTokenSchema = z.object({
 export const authSchema = z.object({
     email: z.string().email(),
     password: z.string(),
-});
-
-export const driverRegistrationSchema = z.object({
-    email: z.string().email(),
-    phoneNumber: z.string().refine((value) => isValidPhoneNumber(value, 'NG'), {
-        message: 'Please provide a valid Nigerian phone number',
-    }),
-    city: z.string().min(1, 'City must be at least one character long'),
-    password: z.string().regex(PASSWORD_CHECK_REGEX, "Password must have at least 1 uppercase letter, 1 lowercase letter, 1 special character, 1 numeric character, and be at least 8 characters long."),
-    service: z.string().refine((value) => getObjectIdIsValid(value), 'Invalid service'),
 });
 
 export const carPersonalInformationSchema = z.object({
@@ -75,6 +66,8 @@ export const paymentDetailsSchema = z.object({
 export const tripDetailsSchema = z.object({
     origin: z.string(),
     destination: z.string(),
+    originCity: z.string(),
+    destinationCity: z.string(),
     price: z.number().positive(),
     isRoundTrip: z.boolean(),
     departureDates: z.array(z.number()).min(1, 'At least one departure date required'),
@@ -91,6 +84,31 @@ export const routeDetailsSchema = z.object({
     routes: z.array(z.string()).min(1),
 });
 
+export const driverRegistrationSchema = z.object({
+    email: z.string().email(),
+    phoneNumber: z.string().refine((value) => isValidPhoneNumber(value, 'NG'), {
+        message: 'Please provide a valid Nigerian phone number',
+    }),
+    city: z.string().min(1, 'City must be at least one character long'),
+    password: z.string().regex(PASSWORD_CHECK_REGEX, "Password must have at least 1 uppercase letter, 1 lowercase letter, 1 special character, 1 numeric character, and be at least 8 characters long."),
+    service: z.string().refine((value) => getObjectIdIsValid(value), 'Invalid service'),
+});
+
+export const userRegistrationSchema = z.object({
+    name: z.string().min(3, 'Full name must be at least 3 characters'),
+    email: z.string().email(),
+    password: z.string().regex(PASSWORD_CHECK_REGEX, "Password must have at least 1 uppercase letter, 1 lowercase letter, 1 special character, 1 numeric character, and be at least 8 characters long."),
+});
+
+export const userUpdateSchema = z.object({
+    firstName: z.string().min(3, 'Last name must be at least 3 characters'),
+    lastName: z.string().min(3, 'Last name must be at least 3 characters'),
+    email: z.string().email(),
+    phoneNumber: z.string().refine((value) => isValidPhoneNumber(value, 'NG'), {
+        message: 'Please provide a valid Nigerian phone number',
+    }),
+});
+
 export type ICoordinates = z.infer<typeof locationCoordinatesSchema>;
 export type IPaymentDetails = z.infer<typeof paymentDetailsSchema>;
 export type ITripDetails = z.infer<typeof tripDetailsSchema>;
@@ -105,6 +123,7 @@ export interface IUser {
     email: string;
     phoneNumber: string;
     password: string;
+    profilePhoto: string;
     lastLogin: Date | null,
     isEmailVerified: boolean;
     emailVerificationToken: string | null;
@@ -112,7 +131,7 @@ export interface IUser {
     emailVerifiedAt: Date | null;
     passwordResetToken: string | null;
     passwordResetTokenExpiryDate: Date | null;
-    coords: ICoordinates;
+    location: Location;
 }
 
 export interface IDriver {
