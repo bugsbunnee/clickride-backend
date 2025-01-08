@@ -124,7 +124,7 @@ router.patch('/me/token', [authUser, validateWith(deviceTokenSchema)], async (re
         });
     }
 
-    return res.status(StatusCodes.OK).json({ message: 'Device token updated successfully!' });
+    return res.status(StatusCodes.OK).json(generateUserSession(user));
 });
 
 router.put('/me/profile', [authUser, upload.single('profilePhoto'), validateWith(userUpdateSchema)], async (req: Request, res: Response): Promise<any> => {

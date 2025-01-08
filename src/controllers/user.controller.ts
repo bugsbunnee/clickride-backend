@@ -29,7 +29,7 @@ export const generateDriverSession = ({ driver, service, user } : DriverSessionP
 };
 
 export const generateUserSession = (user: IUser) => {
-    let authUser = _.pick(user, ['_id', 'firstName', 'lastName', 'phoneNumber', 'profilePhoto', 'city', 'email', 'isEmailVerified', 'emailVerifiedAt']);
+    let authUser = _.pick(user, ['_id', 'firstName', 'lastName', 'phoneNumber', 'deviceToken', 'profilePhoto', 'city', 'email', 'isEmailVerified', 'emailVerifiedAt']);
     
     return {
         token: signPayload(authUser),

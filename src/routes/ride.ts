@@ -5,6 +5,8 @@ import { z } from 'zod';
 
 import JsBarcode from 'jsbarcode';
 import moment from 'moment';
+import mongoose from 'mongoose';
+import _ from 'lodash';
 
 import authUser from '../middleware/authUser';
 import validateWith from '../middleware/validateWith';
@@ -20,9 +22,7 @@ import { RiderForMap } from '../utils/models';
 import { getDriverTimeToLocation } from './geolocation';
 import { Service } from '../models/services/schema';
 import { geocodeLocations } from '../services/google';
-import { ITripDetails } from '../models/user/types';
-import _ from 'lodash';
-import mongoose from 'mongoose';
+import { sendSingleNotification } from '../services/notifications';
 
 const router = express.Router();
 
@@ -123,6 +123,14 @@ router.post('/car', [authUser, validateWith(rideSchema)], async (req: Request, r
         price: driver.price,
     });
 
+    if (req.user!.deviceToken) {
+        await sendSingleNotification({
+            to: req.user!.deviceToken,
+            title: 'Ride booked successfully!',
+            body: 'Your car ride was booked successfully!',
+        });
+    }
+
     res.status(StatusCodes.CREATED).json({
         user: ride._id,
         from: ride.from,
@@ -171,6 +179,14 @@ router.post('/bus', [authUser, validateWith(busBookingSchema)], async (req: Requ
         price: price * req.body.seatNumbers.length
     });
     
+    if (req.user!.deviceToken) {
+        await sendSingleNotification({
+            to: req.user!.deviceToken,
+            title: 'Trip booked successfully!',
+            body: 'Your bus trip was booked successfully!',
+        });
+    }
+
     res.status(StatusCodes.CREATED).json(ride);
 });
 
