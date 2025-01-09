@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import _ from 'lodash';
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import moment from 'moment';
 
 import { StatusCodes } from 'http-status-codes';
