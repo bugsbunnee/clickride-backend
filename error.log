@@ -114,3 +114,4 @@
 {"_message":"User validation failed","errors":{"email":{"kind":"required","message":"Path `email` is required.","name":"ValidatorError","path":"email","properties":{"message":"Path `email` is required.","path":"email","type":"required"}}},"level":"\u001b[31merror\u001b[39m","message":"User validation failed: email: Path `email` is required.","name":"ValidationError","service":"ecommerce-log-service"}
 {"code":15959,"codeName":"Location15959","errorResponse":{"code":15959,"codeName":"Location15959","errmsg":"the match filter must be an expression in an object","ok":0},"level":"\u001b[31merror\u001b[39m","ok":0,"service":"ecommerce-log-service"}
 {"code":15959,"codeName":"Location15959","errorResponse":{"code":15959,"codeName":"Location15959","errmsg":"the match filter must be an expression in an object","ok":0},"level":"\u001b[31merror\u001b[39m","ok":0,"service":"ecommerce-log-service"}
+{"level":"\u001b[31merror\u001b[39m","service":"ecommerce-log-service"}
