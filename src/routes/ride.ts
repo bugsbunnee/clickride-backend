@@ -23,6 +23,7 @@ import { getDriverTimeToLocation } from './geolocation';
 import { Service } from '../models/services/schema';
 import { geocodeLocations } from '../services/google';
 import { sendSingleNotification } from '../services/notifications';
+import validateObjectId from '../middleware/validateObjectId';
 
 const router = express.Router();
 
@@ -110,8 +111,6 @@ router.post('/car', [authUser, validateWith(rideSchema)], async (req: Request, r
     }
 
     const driver: RiderForMap = results[0];
-    const metadata = await getDriverTimeToLocation(driver.coordinates, req.body.from);
-
     const ride = await Ride.create({
         driver: driver._id,
         user: req.user!._id,
@@ -131,18 +130,84 @@ router.post('/car', [authUser, validateWith(rideSchema)], async (req: Request, r
         });
     }
 
-    res.status(StatusCodes.CREATED).json({
-        user: ride._id,
-        from: ride.from,
-        to: ride.to,
-        paymentStatus: ride.paymentStatus,
-        rideStatus: ride.rideStatus,
-        price: ride.price,
-        driver: {
-            ...driver,
-            ...metadata,
+    res.status(StatusCodes.CREATED).json(ride);
+});
+
+router.get('/track/:id', [authUser, validateObjectId], async (req: Request, res: Response): Promise<any> => {
+    console.log(req.params)
+    let results = await Ride.aggregate([
+        { 
+            $match: {
+                user: parseObjectId(req.user!._id.toString()), 
+                _id: parseObjectId(req.params.id),
+            }
+        },
+        {
+            $lookup: {
+                from: 'drivers',
+                localField: 'driver',
+                foreignField: '_id',
+                as: 'driver'
+            }
+        }, 
+        {
+            $unwind: '$driver'
+        },
+        {
+            $lookup: {
+                from: 'services',
+                localField: 'driver.service',
+                foreignField: '_id',
+                as: 'driver.service'
+            }
+        }, 
+        {
+            $unwind: '$driver.service'
+        },
+        {
+            $lookup: {
+                from: 'users',
+                localField: 'driver.user',
+                foreignField: '_id',
+                as: 'driver.user'
+            }
+        }, 
+        {
+            $unwind: '$driver.user'
+        },
+        {
+            $project: {
+                _id: "$_id",
+                from: '$from',
+                to: '$to',
+                service: '$driver.service',
+                driver: {
+                    firstName: '$driver.user.firstName',
+                    lastName: '$driver.user.lastName',
+                    profilePhoto: {
+                        $ifNull: [
+                            '$driver.profile.vehicleDocuments.display',
+                            '$driver.profile.busPersonalInformation.companyLogo',
+                            '$driver.profile.profilePhotoUrl'
+                        ]
+                    },
+                    coordinates: {
+                        longitude: { $arrayElemAt: ["$driver.user.location.coordinates", 0] },
+                        latitude: { $arrayElemAt: ["$driver.user.location.coordinates", 1] },
+                    },
+                }
+            }
         }
-    });
+    ]);
+
+    if (results.length === 0) {
+        return res.status(StatusCodes.NOT_FOUND).json({ message: 'The given ride was not found!' });
+    }
+
+    let ride = results[0];
+    let timeToLocation = await getDriverTimeToLocation(ride.driver.coordinates, ride.from);
+
+    res.json(_.merge(ride, timeToLocation));
 });
 
 router.post('/bus', [authUser, validateWith(busBookingSchema)], async (req: Request, res: Response): Promise<any> => {
@@ -192,6 +257,7 @@ router.post('/bus', [authUser, validateWith(busBookingSchema)], async (req: Requ
 
 router.get('/me', [authUser], async (req: Request, res: Response): Promise<any> => {
     const rides = await Ride.aggregate([
+        { $match: { user: parseObjectId(req.user!._id.toString()) } },
         { 
             $lookup: {
                 from: 'drivers',

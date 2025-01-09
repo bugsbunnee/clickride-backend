@@ -5,8 +5,10 @@ import moment from 'moment';
 
 import { StatusCodes } from 'http-status-codes';
 import { Driver, User } from '../models/user/schema';
-import { authSchema } from '../models/user/types';
+import { authSchema, deviceTokenSchema } from '../models/user/types';
 import { generateDriverSession, generateUserSession } from '../controllers/user.controller';
+import { getUserProfileFromToken } from '../services/google';
+import { hashPassword } from '../utils/lib';
 
 import validateWith from '../middleware/validateWith';
 
@@ -76,5 +78,25 @@ router.post('/login', [validateWith(authSchema)], async (req: Request, res: Resp
 
     res.json(generateUserSession(user));
 });
+
+router.post('/google', [validateWith(deviceTokenSchema)], async (req: Request, res: Response): Promise<any> => {
+    let profile = await getUserProfileFromToken(req.body.token);
+    if (!profile) return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: 'Could not fetch the user profile!' });
+
+    let user = await User.findOne({ email: profile.email });
+
+    if (!user) {
+        user = await User.create({
+            firstName: profile.given_name,
+            lastName: profile.family_name,
+            email: profile.email,
+            password: await hashPassword(profile.id),
+        });
+    }
+
+    return res.json(generateUserSession(user));
+});
+
+
 
 export default router;

@@ -11,8 +11,7 @@ export const sendSingleNotification = async (payload: NotificationPayload) => {
     const endpoint = process.env.EXPO_NOTIFICATIONS_API_URL as string;
 
     try {
-       const response = await axios.post(endpoint, payload);
-       console.log(response);
+        await axios.post(endpoint, payload);
     } catch (error) {
         logger.error((error as Error).message);
     }

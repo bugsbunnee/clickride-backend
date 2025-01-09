@@ -3,6 +3,7 @@ import axios from "axios";
 import { ICoordinates } from "../models/user/types";
 import { mapCoordsToString } from "../utils/lib";
 import _ from "lodash";
+import logger from "../startup/logger";
 
 interface DistanceElement {
     distance: { text: string; value: number; };
@@ -22,8 +23,6 @@ interface DistancePayload {
     destinations: (ICoordinates | string)[];
 }
 
-
-
 interface GeocodeResponse {
     results: {
         formatted_address: string;
@@ -36,6 +35,15 @@ interface GeocodeResponse {
     }[];
 }
 
+interface GoogleUserProfile {
+    email: string;
+    family_name: string;
+    given_name: string;
+    id: string;
+    name: string;
+    picture: string;
+    verified_email: boolean;
+}
 
 export const getDistanceBetweenCoords = async ({ origins, destinations }: DistancePayload) => {
     try {
@@ -68,4 +76,21 @@ export const geocodeLocations = async (addresses: string[]) => {
     } catch (error) {
         return null;
     }
+};
+
+export const getUserProfileFromToken = async (token: string) => {
+        const config = {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        };
+    
+        try {
+            const response = await axios.get<GoogleUserProfile>(process.env.GOOGLE_USER_API_URL!, config);
+            return response.data;
+        } catch (error) {
+            logger.error(error);
+
+            return null;
+        }
 };

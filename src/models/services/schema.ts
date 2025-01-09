@@ -11,6 +11,7 @@ const ServiceSchema = new mongoose.Schema<IService>({
    color: { type: String, required: true },
    image: { type: String, unique: true, required: true, trim: true },
    driver: { type: String, unique: true, required: true, trim: true },
+   route: { type: String, unique: true, required: true, trim: true },
 });
 
 export const Service = mongoose.model<IService>('Service', ServiceSchema);

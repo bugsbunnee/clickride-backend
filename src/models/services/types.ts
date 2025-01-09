@@ -8,6 +8,7 @@ const serviceSchema = z.object({
     color: z.string(),
     image: z.string().url(),
     driver: z.string(),
+    route: z.string(),
 });
 
 export type IService = z.infer<typeof serviceSchema>;

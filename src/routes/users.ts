@@ -22,12 +22,12 @@ router.post('/', [validateWith(userRegistrationSchema)], async (req: Request, re
     let user = await User.findOne({ email: req.body.email });
     if (user) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'An account with this email already exists!' });
 
-    let names = req.body.name.split(' ');
-    if (names.length < 2) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Name must include first and last name!' });
+    let result = getFirstAndLastNames(req.body.name);
+    if (!result.status) return res.status(StatusCodes.BAD_REQUEST).json({ message: result.message });
 
     user = await User.create({
-        firstName: names[0],
-        lastName: names[1],
+        firstName: result.names[0],
+        lastName: result.names[1],
         email: req.body.email,
         password: await hashPassword(req.body.password),
     });
@@ -184,6 +184,13 @@ const uploadProfilePhoto = async (req: Request) => {
     }
 
     return { code: StatusCodes.OK, message: 'Uploaded successfully', status: true, fileUrl: response.secure_url };
+};
+
+const getFirstAndLastNames = (name: string) => {
+    let names = name.split(' ');
+    if (names.length < 2) return { status: false, message: 'Name must include first and last name!', names };
+
+    return { status: true, message: 'Name must include first and last name!', names };
 };
 
 export default router;
