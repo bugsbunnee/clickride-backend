@@ -5,7 +5,7 @@ import 'winston-mongodb';
 const logger = winston.createLogger({
     level: 'info',
     format: winston.format.combine(winston.format.colorize(), winston.format.json()),
-    defaultMeta: { service: 'ecommerce-log-service' },
+    defaultMeta: { service: 'clickride-log-service' },
     handleExceptions: true,
     transports: [],
 });
@@ -13,7 +13,7 @@ const logger = winston.createLogger({
 if (process.env.NODE_ENV === 'production') {
     const transportOptions: MongoDBConnectionOptions = {
         db: process.env.DB_URL as string,
-        dbName: 'dulux',
+        dbName: 'clickride-backend',
         expireAfterSeconds: 2_592_000,
         tryReconnect: true,
         level: 'info',
