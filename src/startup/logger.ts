@@ -11,15 +11,15 @@ const logger = winston.createLogger({
 });
 
 if (process.env.NODE_ENV === 'production') {
-    const transportOptions: MongoDBConnectionOptions = {
-        db: process.env.DB_URL as string,
-        dbName: 'clickride-backend',
-        expireAfterSeconds: 2_592_000,
-        tryReconnect: true,
-        level: 'info',
-    };
+    // const transportOptions: MongoDBConnectionOptions = {
+    //     db: process.env.DB_URL as string,
+    //     dbName: 'clickride-backend',
+    //     expireAfterSeconds: 2_592_000,
+    //     tryReconnect: true,
+    //     level: 'info',
+    // };
 
-    logger.add(new winston.transports.MongoDB(transportOptions));
+    // logger.add(new winston.transports.MongoDB(transportOptions));
 } else {
     logger.add(new winston.transports.Console({ format: winston.format.combine(winston.format.colorize(), winston.format.json()), }));
     logger.add(new winston.transports.File({ filename: 'error.log', level: 'error' }));
