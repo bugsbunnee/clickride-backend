@@ -494,6 +494,7 @@ const generateTicketQuery = (filters: Record<string, any>)  => {
     return Driver.aggregate([
         { $match: filters },
         { $unwind: "$profile.tripDetails" },
+        { $unwind: "$profile.tripDetails.departureDates" },
         {
             $group: {
                 _id: {
@@ -501,6 +502,8 @@ const generateTicketQuery = (filters: Record<string, any>)  => {
                     originCity: "$profile.tripDetails.originCity",
                     destination: "$profile.tripDetails.destination",
                     destinationCity: "$profile.tripDetails.destinationCity",
+                    departureDate: "$profile.tripDetails.departureDates", 
+                    departureTime: "$profile.tripDetails.departureTime",
                 },
                 details: {
                     $push: {
@@ -514,7 +517,6 @@ const generateTicketQuery = (filters: Record<string, any>)  => {
                                 else: "$profile.tripDetails.price"                        // If false, keep the price as is
                             }
                         },
-                        departureDate: "$profile.tripDetails.departureDates",
                         departureTime: "$profile.tripDetails.departureTime",
                         returnDate: "$profile.tripDetails.returnDates",
                         returnTime: "$profile.tripDetails.returnTime"
@@ -523,8 +525,6 @@ const generateTicketQuery = (filters: Record<string, any>)  => {
             }
         },
         { $unwind: "$details" },
-        { $unwind: "$details.departureDate" },
-        { $unwind: "$details.returnDate" },
         {
             $project: {
                 _id: 0,
