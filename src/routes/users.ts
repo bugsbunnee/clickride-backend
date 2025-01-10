@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
-import _ from 'lodash';
 import mongoose from 'mongoose';
+import _ from 'lodash';
 
 import { StatusCodes } from 'http-status-codes';
 import { Driver, User } from '../models/user/schema';
@@ -31,6 +31,8 @@ router.post('/', [validateWith(userRegistrationSchema)], async (req: Request, re
         email: req.body.email,
         password: await hashPassword(req.body.password),
     });
+
+    await user.sendVerificationEmail();
 
     res.status(StatusCodes.CREATED).json(generateUserSession(user));
 });
@@ -92,6 +94,8 @@ router.post('/driver', [validateWith(driverRegistrationSchema)], async (req: Req
         user: user._id,
     });
 
+    await user.sendWelcomeEmail();
+
     res.status(StatusCodes.CREATED).json(generateDriverSession({ driver, service, user }));
 });
 
@@ -131,8 +135,6 @@ router.put('/me/profile', [authUser, upload.single('profilePhoto'), validateWith
     const result = await uploadProfilePhoto(req);
     if (!result.status) return res.status(result.code).json({ message: result.message });
 
-    console.log(req.file, req.files, req.body)
-    console.log('fileUrl', result.fileUrl, req.file)
     const user = await User.findByIdAndUpdate(req.user!._id, {
         $set: {
             firstName: req.body.firstName,

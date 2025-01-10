@@ -5,6 +5,12 @@ import _ from "lodash";
 import { ICarPersonalInformation, IDriver, IPaymentDetails, IUser, IUserMethods, IProfile, IVehicleDocuments, ITripDetails, IRouteDetails, IBusPersonalInformation } from "./types";
 import { generateRandomCode, generateRandomToken, signPayload } from "../../utils/lib";
 import { EXPIRY_TIME_IN_MINUTES, GENDER_OPTIONS, LOCATION_TYPES, SAMPLE_SIZES } from "../../utils/constants";
+import { sendEmail } from "../../services/email";
+
+import VerifyEmail from '../../emails/verification';
+import WelcomeEmail from '../../emails/welcome';
+
+import logger from "../../startup/logger";
 
 interface UserModel extends mongoose.Model<IUser, {}, IUserMethods> {}
 
@@ -12,13 +18,19 @@ const PaymentDetailsSchema = new mongoose.Schema<IPaymentDetails>({
     billingType: { type: String, required: true },
     address: { type: String, required: true },
     accountName: { type: String, required: true },
-    accountNumber: { type: String, minlength: 10, required: true, trim: true, index: {
-        unique: true,
-        partialFilterExpression: { 
-            accountNumber: { $type: "string" }
-        }
-    } },
     bankName: { type: String, required: true },
+    accountNumber: { 
+        type: String, 
+        minlength: 10, 
+        required: true, 
+        trim: true, 
+        index: {
+            unique: true,
+            partialFilterExpression: { 
+                accountNumber: { $type: "string" }
+            }
+        } 
+    },
 });
 
 const CarPersonalInformationSchema = new mongoose.Schema<ICarPersonalInformation>({
@@ -84,7 +96,11 @@ const UserSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     lastName: { type: String },
     email: { type: String, required: true, trim: true, unique: true },
     deviceToken: { type: String, required: false },
-    phoneNumber: { type: String, required: false, minlength: 5, unique: true },
+    phoneNumber: {
+        type: String, 
+        required: false, 
+        minlength: 10, 
+    },
     city: { type: String, required: false, },
     password: { type: String, required: true },
     lastLogin: { type: Date,  default: null },
@@ -131,10 +147,44 @@ UserSchema.method('generateResetPasswordToken', function () {
 });
 
 UserSchema.method('generateEmailVerificationToken', function () {
-    this.emailVerificationToken = generateRandomCode(4, SAMPLE_SIZES.NUMERIC);
+    this.emailVerificationToken = generateRandomCode(6, SAMPLE_SIZES.NUMERIC);
     this.emailVerificationTokenExpiryDate = moment().add(EXPIRY_TIME_IN_MINUTES.VERIFY_ACCOUNT, 'minutes').toDate();
 
     return this.emailVerificationToken;
+});
+
+UserSchema.method('sendWelcomeEmail', async function () {
+    try {
+        await sendEmail({
+            to: this.email,
+            subject: 'Welcome to ClikRide',
+            text: 'Welcome to ClikRide, ' + this.firstName,
+            react: WelcomeEmail({ userFirstname: this.firstName })
+        });
+    } catch (error) {
+       logger.error(error);
+    }
+});
+
+UserSchema.method('sendVerificationEmail', async function () {
+    const token = this.generateEmailVerificationToken();
+
+    try {
+        await sendEmail({
+            to: this.email,
+            subject: 'Verify your email',
+            text: 'Verify your ClikRide Email',
+            react: VerifyEmail({ 
+                verificationCode: token,
+                validityInMinutes: EXPIRY_TIME_IN_MINUTES.VERIFY_ACCOUNT,
+            })
+        });
+    } catch (error) {
+        this.emailVerificationToken = null;
+        this.emailVerificationTokenExpiryDate = null;
+    }
+
+    await this.save();
 });
 
 UserSchema.method('sendRecentLoginEmail', async function (req: Request) {

@@ -1542,3 +1542,90 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
 {"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
 {"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"code":11000,"errorResponse":{"code":11000,"errmsg":"E11000 duplicate key error collection: clickride-backend.users index: phoneNumber_1 dup key: { phoneNumber: null }","index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null}},"index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null},"level":"\u001b[31merror\u001b[39m","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"code":11000,"errorResponse":{"code":11000,"errmsg":"E11000 duplicate key error collection: clickride-backend.users index: phoneNumber_1 dup key: { phoneNumber: null }","index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null}},"index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null},"level":"\u001b[31merror\u001b[39m","service":"clickride-log-service"}
+{"code":11000,"errorResponse":{"code":11000,"errmsg":"E11000 duplicate key error collection: clickride-backend.users index: phoneNumber_1 dup key: { phoneNumber: null }","index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null}},"index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null},"level":"\u001b[31merror\u001b[39m","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"code":11000,"errorResponse":{"code":11000,"errmsg":"E11000 duplicate key error collection: clickride-backend.users index: phoneNumber_1 dup key: { phoneNumber: null }","index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null}},"index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null},"level":"\u001b[31merror\u001b[39m","service":"clickride-log-service"}
+{"code":11000,"errorResponse":{"code":11000,"errmsg":"E11000 duplicate key error collection: clickride-backend.users index: phoneNumber_1 dup key: { phoneNumber: null }","index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null}},"index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null},"level":"\u001b[31merror\u001b[39m","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"code":11000,"errorResponse":{"code":11000,"errmsg":"E11000 duplicate key error collection: clickride-backend.users index: phoneNumber_1 dup key: { phoneNumber: null }","index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null}},"index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null},"level":"\u001b[31merror\u001b[39m","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"code":11000,"errorResponse":{"code":11000,"errmsg":"E11000 duplicate key error collection: clickride-backend.users index: phoneNumber_1 dup key: { phoneNumber: null }","index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null}},"index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null},"level":"\u001b[31merror\u001b[39m","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"code":11000,"errorResponse":{"code":11000,"errmsg":"E11000 duplicate key error collection: clickride-backend.users index: phoneNumber_1 dup key: { phoneNumber: null }","index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null}},"index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null},"level":"\u001b[31merror\u001b[39m","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"code":11000,"errorResponse":{"code":11000,"errmsg":"E11000 duplicate key error collection: clickride-backend.users index: phoneNumber_1 dup key: { phoneNumber: null }","index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null}},"index":0,"keyPattern":{"phoneNumber":1},"keyValue":{"phoneNumber":null},"level":"\u001b[31merror\u001b[39m","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 3001","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}

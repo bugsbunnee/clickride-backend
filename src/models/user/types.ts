@@ -7,6 +7,10 @@ import { Gender, GENDER_OPTIONS, MIN_CAR_YEAR, PASSWORD_CHECK_REGEX } from '../.
 import { getObjectIdIsValid } from '../../utils/lib';
 import { Location } from '../../utils/models';
 
+export const emailSchema = z.object({
+    email: z.string().email(),
+});
+
 export const vehicleDocumentsSchema = z.object({
     license: z.array(z.any()).min(1, 'License must be at least 1 photo'),
     display: z.array(z.any()).min(1, 'Display photo must be at least 1 photo'),
@@ -107,6 +111,11 @@ export const userUpdateSchema = z.object({
     phoneNumber: z.string().refine((value) => isValidPhoneNumber(value, 'NG'), {
         message: 'Please provide a valid Nigerian phone number',
     }),
+});
+
+export const verifyEmailJoiSchema = z.object({
+    email: z.string().email(),
+    token: z.string(),
 });
 
 export type ICoordinates = z.infer<typeof locationCoordinatesSchema>;

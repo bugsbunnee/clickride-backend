@@ -100,7 +100,9 @@ export const createCustomer = async (user: IUser) => {
     };
 
     try {
-        const response = await axios.post<CustomerCreationResponse>('/customer', data, config);
+        const endpoint = process.env.PAYSTACK_API_URL + '/customer';
+        const response = await axios.post<CustomerCreationResponse>(endpoint, data, config);
+
         return response.data;
     } catch (error) {
         
