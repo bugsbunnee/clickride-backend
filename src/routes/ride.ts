@@ -517,7 +517,6 @@ const generateTicketQuery = (filters: Record<string, any>)  => {
                                 else: "$profile.tripDetails.price"                        // If false, keep the price as is
                             }
                         },
-                        departureTime: "$profile.tripDetails.departureTime",
                         returnDate: "$profile.tripDetails.returnDates",
                         returnTime: "$profile.tripDetails.returnTime"
                     }
@@ -532,7 +531,16 @@ const generateTicketQuery = (filters: Record<string, any>)  => {
                 originCity: "$_id.originCity", 
                 destination: "$_id.destination",
                 destinationCity: "$_id.destinationCity", 
-                details: 1,
+                details: {
+                    ticketId: "$details.ticketId",
+                    logo: "$details.logo",
+                    seatCount: "$details.seatCount",
+                    price: "$details.price",
+                    departureDate: "$_id.departureDate",
+                    departureTime: "$_id.departureTime",
+                    returnDate: "$details.returnDates",
+                    returnTime: "$details.returnTime",
+                }
             }
         },
         {
