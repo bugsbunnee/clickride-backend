@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 import { isValidPhoneNumber } from 'libphonenumber-js';
+import { Request } from 'express';
 import { z } from 'zod';
 
 import { Gender, GENDER_OPTIONS, MIN_CAR_YEAR, PASSWORD_CHECK_REGEX } from '../../utils/constants';
@@ -195,7 +196,7 @@ export interface IUserMethods {
     sendPasswordResetEmail: () => Promise<void>;
     sendWelcomeEmail: () => Promise<void>;
     sendVerificationEmail: () => Promise<void>;
-    sendRecentLoginEmail: () => Promise<void>;
+    sendRecentLoginEmail: (request: Request) => Promise<void>;
 }
 
 export interface IDriverMethods {

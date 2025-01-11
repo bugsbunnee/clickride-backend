@@ -4,8 +4,27 @@ import mongoose from 'mongoose';
 import jwt from 'jsonwebtoken';
 import _ from 'lodash';
 
+import { Request } from 'express';
 import { SAMPLE_SIZES } from './constants';
 import { ICoordinates } from '../models/user/types';
+import { getLocationFromIP } from '../services/google';
+
+export const getIPAddress = (req: Request) => {
+    return req.ip || req.socket.remoteAddress || req.headers['x-forwarded-for'] as string;
+};
+
+export const getRequestIdentificationDetails = async (req: Request) => {
+    const idDetails = {
+        ipAddress: getIPAddress(req),
+        device: req.headers['user-agent'] ?? 'Unknown',
+        location: 'Unknown',
+    };
+    
+    const location = await getLocationFromIP(idDetails.ipAddress);
+    if (location) idDetails.location = location;
+
+    return idDetails;
+};
 
 export const generateRandomToken = () => {
 	const token = crypto.randomBytes(32).toString('hex');

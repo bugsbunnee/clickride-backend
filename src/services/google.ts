@@ -45,6 +45,34 @@ interface GoogleUserProfile {
     verified_email: boolean;
 }
 
+interface IPLocationResponse {
+    ip: string;
+    error?: boolean;
+    version: string;
+    city: string;
+    region: string;
+    region_code: string;
+    country_code: string;
+    country_code_iso3: string;
+    country_name: string;
+    country_capital: string;
+    country_tld: string;
+    continent_code: string;
+    in_eu: boolean;
+    postal: string;
+    latitude: number;
+    longitude: number;
+    timezone: string;
+    utc_offset: string;
+    country_calling_code: string;
+    currency: string;
+    currency_name: string;
+    languages: string;
+    asn: string;
+    org: string;
+    hostname: string;
+}
+
 export const getDistanceBetweenCoords = async ({ origins, destinations }: DistancePayload) => {
     try {
         const endpoint = process.env.GOOGLE_API_URL + '/distancematrix/json';
@@ -93,4 +121,18 @@ export const getUserProfileFromToken = async (token: string) => {
 
             return null;
         }
+};
+
+export const getLocationFromIP = async (ipAddress: string) => {
+    try {
+        const endpoint = `https://ipapi.co/${ipAddress}/json/`;
+        const response = await axios.get<IPLocationResponse>(endpoint);
+
+        if (response.data.error) return '';
+
+        return `${response.data.city} ${response.data.region} ${response.data.country_name}`;
+    } catch (error) {
+        return '';
+    }
+
 };

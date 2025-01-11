@@ -3,7 +3,7 @@ import moment from "moment";
 import _ from "lodash";
 
 import { ICarPersonalInformation, IDriver, IPaymentDetails, IUser, IUserMethods, IProfile, IVehicleDocuments, ITripDetails, IRouteDetails, IBusPersonalInformation } from "./types";
-import { generateRandomCode, generateRandomToken, signPayload } from "../../utils/lib";
+import { generateRandomCode, generateRandomToken, getRequestIdentificationDetails, signPayload } from "../../utils/lib";
 import { EXPIRY_TIME_IN_MINUTES, GENDER_OPTIONS, LOCATION_TYPES, SAMPLE_SIZES } from "../../utils/constants";
 import { sendEmail } from "../../services/email";
 
@@ -11,6 +11,8 @@ import VerifyEmail from '../../emails/verification';
 import WelcomeEmail from '../../emails/welcome';
 
 import logger from "../../startup/logger";
+import RecentLoginEmail from '../../emails/recent-login';
+import { Request } from "express";
 
 interface UserModel extends mongoose.Model<IUser, {}, IUserMethods> {}
 
@@ -188,14 +190,28 @@ UserSchema.method('sendVerificationEmail', async function () {
 });
 
 UserSchema.method('sendRecentLoginEmail', async function (req: Request) {
-    this.lastLogin = Date.now() as unknown as Date;
+    this.lastLogin = moment().toDate();
     
     try {
-        const updatedUser = await this.save();
+        const [details, _] = await Promise.all([getRequestIdentificationDetails(req), this.save()]);
 
-        // Implement email here
+        await sendEmail({
+            to: this.email,
+            subject: 'Recent Login',
+            text: 'Recent login to ClikRide',
+            react: RecentLoginEmail({
+                userFirstName: this.firstName,
+                loginDate: moment(this.lastLogin).format('DD MMMM YYYY, HH:mm:ss'),
+                loginDevice: details.device,
+                loginIp: details.ipAddress,
+                loginLocation: details.location,
+            })
+        })
     } catch (error) {
+        logger.error(error);
     }
+
+
 });
 
 export const Driver = mongoose.model<IDriver>('Driver', DriverSchema);

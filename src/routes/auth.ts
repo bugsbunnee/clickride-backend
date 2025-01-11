@@ -79,8 +79,7 @@ router.post('/login', [validateWith(authSchema)], async (req: Request, res: Resp
     let validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid credentials.' });
 
-    user.lastLogin = moment().toDate();
-    user = await user.save();
+    await user.sendRecentLoginEmail(req);
 
     res.json(generateUserSession(user));
 });
@@ -91,13 +90,17 @@ router.post('/google', [validateWith(deviceTokenSchema)], async (req: Request, r
 
     let user = await User.findOne({ email: profile.email });
 
-    if (!user) {
+    if (user) {
+        await user.sendRecentLoginEmail(req);
+    } else {
         user = await User.create({
             firstName: profile.given_name,
             lastName: profile.family_name,
             email: profile.email,
             password: await hashPassword(profile.id),
         });
+
+        await user.sendWelcomeEmail();
     }
 
     return res.json(generateUserSession(user));
