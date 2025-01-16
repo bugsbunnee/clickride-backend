@@ -9,6 +9,12 @@ export const SAMPLE_SIZES = {
     NUMERIC: '0123456789',
 };
 
+export enum UserType {
+    DRIVER = 'driver',
+    RIDER = 'rider',
+    ADMIN = 'admin',
+};
+
 export enum Gender {
     MALE = 'Male',
     FEMALE = 'Female'
@@ -37,6 +43,7 @@ export enum RideStatus {
     CANCELED = 'canceled'
 }
 
+export const USER_TYPES = Object.values(UserType);
 export const SERVICE_CODES = Object.values(ServiceCode);
 export const GENDER_OPTIONS = Object.values(Gender);
 export const LOCATION_TYPES = Object.values(LocationType);
@@ -50,6 +57,7 @@ export const USER_FIELDS_TO_EXCLUDE = [
     'emailVerificationToken',
     'emailVerificationTokenExpiryDate',
     'emailVerifiedAt',
+    'password',
     'passwordResetToken',
     'passwordResetTokenExpiryDate',
 ];

@@ -2,9 +2,9 @@ import mongoose from "mongoose";
 import moment from "moment";
 import _ from "lodash";
 
-import { ICarPersonalInformation, IDriver, IPaymentDetails, IUser, IUserMethods, IProfile, IVehicleDocuments, ITripDetails, IRouteDetails, IBusPersonalInformation } from "./types";
+import { ICarPersonalInformation, IDriver, IPaymentDetails, IUser, IUserMethods, IProfile, IVehicleDocuments, ITripDetails, IRouteDetails, IBusPersonalInformation, ILocalRidePersonalInformation } from "./types";
 import { generateRandomCode, generateRandomToken, getRequestIdentificationDetails, signPayload } from "../../utils/lib";
-import { EXPIRY_TIME_IN_MINUTES, GENDER_OPTIONS, LOCATION_TYPES, SAMPLE_SIZES } from "../../utils/constants";
+import { EXPIRY_TIME_IN_MINUTES, GENDER_OPTIONS, LOCATION_TYPES, SAMPLE_SIZES, USER_TYPES, UserType } from "../../utils/constants";
 import { sendEmail } from "../../services/email";
 
 import VerifyEmail from '../../emails/verification';
@@ -49,6 +49,11 @@ const BusPersonalInformationSchema = new mongoose.Schema<IBusPersonalInformation
     companyLogo: { type: String, trim: true, required: true },
 });
 
+const LocalRidePersonalInformationSchema = new mongoose.Schema<ILocalRidePersonalInformation>({
+    localRideType: { type: mongoose.Schema.ObjectId, ref: 'LocalRideType' },
+    profilePhotoUrl: { type: String, required: true },
+});
+
 const VehicleDocumentsSchema = new mongoose.Schema<IVehicleDocuments>({
     license: { type: String, required: true },
     display: { type: String, required: true },
@@ -77,19 +82,20 @@ const TripDetailsSchema = new mongoose.Schema<ITripDetails>({
     airConditioning: { type: Boolean, required: true },
 });
 
-const RouteDetailsSchema = new mongoose.Schema<IRouteDetails>({
-    routes: [{ type: String, required: true }],
+const RouteDetailsSchema = new mongoose.Schema({
+    route: { type: String, required: true },
     price: { type: Number, required: true },
+    views: { type: Number, min: 0, default: 0 },
 });
 
 const ProfileSchema = new mongoose.Schema<IProfile>({
     carPersonalInformation: CarPersonalInformationSchema,
     busPersonalInformation: BusPersonalInformationSchema,
+    localRidePersonalInformation: LocalRidePersonalInformationSchema,
     paymentDetails: PaymentDetailsSchema,
     vehicleDocuments: VehicleDocumentsSchema,
     tripDetails: [TripDetailsSchema],
-    routeDetails: RouteDetailsSchema,
-    profilePhotoUrl: { type: String, required: false },
+    routeDetails: [RouteDetailsSchema],
     inspectionUrl: { type: String, required: false },
 }, { timestamps: true });
 
@@ -98,11 +104,7 @@ const UserSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     lastName: { type: String },
     email: { type: String, required: true, trim: true, unique: true },
     deviceToken: { type: String, required: false },
-    phoneNumber: {
-        type: String, 
-        required: false, 
-        minlength: 10, 
-    },
+    phoneNumber: { type: String,  required: false,  minlength: 10 },
     city: { type: String, required: false, },
     password: { type: String, required: true },
     lastLogin: { type: Date,  default: null },
@@ -113,6 +115,8 @@ const UserSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     emailVerifiedAt: { type: Date, default: null },
     passwordResetToken: { type: String, default: null },
     passwordResetTokenExpiryDate: { type: Date, default: null },
+    userType: { type: String, enum: USER_TYPES, default: UserType.RIDER },
+    rating: { type: Number, min: 0, default: 0 },
     location: {
         type: { type: String, enum: LOCATION_TYPES },
         coordinates: { type: [Number] },
@@ -122,7 +126,6 @@ const UserSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
 const DriverSchema = new mongoose.Schema<IDriver>({
     user: { type: mongoose.Schema.ObjectId, unique: true, required: true, ref: 'User' },
     service: { type: mongoose.Schema.ObjectId, ref: 'Service', required: true },
-    rating: { type: Number, min: 0, default: 0 },
     profile: ProfileSchema,
 }, { timestamps: true });
 

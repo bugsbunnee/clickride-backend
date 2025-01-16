@@ -6,7 +6,7 @@ import { z } from 'zod';
 import authUser from '../middleware/authUser';
 import validateWith from '../middleware/validateWith';
 
-import { User } from '../models/user/schema';
+import { Driver, User } from '../models/user/schema';
 import { ICoordinates, locationCoordinatesSchema } from '../models/user/types';
 import { LocationType, ServiceCode } from '../utils/constants';
 import { getDistanceBetweenCoords } from '../services/google';
@@ -63,17 +63,18 @@ router.post('/available-riders', [validateWith(locationCoordinatesSchema)], asyn
     let filters = { 
         "driverDetails.service.code": ServiceCode.LOCAL ,
         "driverDetails.profile": { $exists: true },
+        "driverDetails.profile.localRidePersonalInformation": { $exists: true },
         "driverDetails.profile.routeDetails": { $exists: true, $not: { $size: 0 } },
     };
 
     let projection = {
         price: { $ifNull: ['$profile.routeDetails.price', 0] },
-        profileDisplayImage: '$driverDetails.profile.profilePhotoUrl',
+        profileDisplayImage: '$driverDetails.profile.localRidePersonalInformation.profilePhotoUrl',
     };
 
-    let availableRiders = await getDriversWithinLocation(req.body, filters, projection);
-
-    res.json(availableRiders);
+    let [availableRiders, popularLocations] = await Promise.all([getDriversWithinLocation(req.body, filters, projection), getPopularLocations()]);
+    
+    res.json({ availableRiders, popularLocations });
 });
 
 export const getDriversWithinLocation = async (params: ICoordinates, filters: Record<string, any>, projection: Projection) => {
@@ -116,8 +117,8 @@ export const getDriversWithinLocation = async (params: ICoordinates, filters: Re
                 _id: "$driverDetails._id",
                 firstName: "$firstName",
                 lastName: "$lastName",
+                rating: "$rating",
                 serviceDisplayImage: '$driverDetails.service.image',
-                rating: '$driverDetails.rating',
                 price: projection.price,
                 profileDisplayImage: projection.profileDisplayImage,
                 coordinates: {
@@ -150,6 +151,39 @@ export const getDriverTimeToLocation = async (from: ICoordinates | string, to: I
     }
 
     return details;
+};
+
+export const getPopularLocations = async () => {
+    const result = await Driver.aggregate([
+        { 
+            $match: {
+                "profile.routeDetails": { $exists: true, $not: { $size: 0 } },
+            }
+        },
+        {
+          $unwind: '$profile.routeDetails',
+        },
+        {
+          $group: {
+            _id: '$profile.routeDetails.route', 
+            views: { $sum: '$profile.routeDetails.views' },
+            price: { $min: '$profile.routeDetails.price' },
+          },
+        },
+        {
+          $sort: { views: -1 },
+        },
+        {
+          $project: {
+            _id: 0, 
+            route: '$_id',
+            views: 1,
+            price: 1,
+          },
+        },
+    ]);
+
+    return result;
 };
 
 export const getDriversForTrip = async (params: ICoordinates) => {

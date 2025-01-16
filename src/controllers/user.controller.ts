@@ -16,7 +16,6 @@ interface DriverSessionParams {
 export const generateDriverSession = ({ driver, service, user } : DriverSessionParams) => {
     const account: DriverSession = {
         _id: driver._id,
-        rating: driver.rating,
         profile: driver.profile,
         service,
         user: _.omit(user, USER_FIELDS_TO_EXCLUDE) as IUser,
@@ -29,7 +28,20 @@ export const generateDriverSession = ({ driver, service, user } : DriverSessionP
 };
 
 export const generateUserSession = (user: IUser) => {
-    let authUser = _.pick(user, ['_id', 'firstName', 'lastName', 'phoneNumber', 'deviceToken', 'profilePhoto', 'city', 'email', 'isEmailVerified', 'emailVerifiedAt']);
+    let authUser = _.pick(user, [
+        '_id',
+        'firstName',
+        'lastName',
+        'phoneNumber',
+        'userType',
+        'deviceToken',
+        'profilePhoto',
+        'city',
+        'email',
+        'rating',
+        'isEmailVerified',
+        'emailVerifiedAt'
+    ]);
     
     return {
         token: signPayload(authUser),

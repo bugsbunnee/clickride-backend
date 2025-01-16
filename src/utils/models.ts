@@ -6,7 +6,6 @@ import { LocationType } from './constants';
 export interface DriverSession {
     _id: mongoose.Types.ObjectId;
     service: IService;
-    rating: number;
     user: IUser;
     profile?: IProfile;
 };

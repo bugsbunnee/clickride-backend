@@ -4,7 +4,7 @@ import { isValidPhoneNumber } from 'libphonenumber-js';
 import { Request } from 'express';
 import { z } from 'zod';
 
-import { Gender, GENDER_OPTIONS, MIN_CAR_YEAR, PASSWORD_CHECK_REGEX } from '../../utils/constants';
+import { Gender, GENDER_OPTIONS, MIN_CAR_YEAR, PASSWORD_CHECK_REGEX, UserType } from '../../utils/constants';
 import { getObjectIdIsValid } from '../../utils/lib';
 import { Location } from '../../utils/models';
 
@@ -58,6 +58,7 @@ export const busPersonalInformationSchema = z.object({
 export const localPersonalInformationSchema = z.object({
     firstName: z.string(),
     lastName: z.string(),
+    localRideType: z.string().refine((value) => getObjectIdIsValid(value), 'Invalid local ride type'),
 });
 
 export const paymentDetailsSchema = z.object({
@@ -86,7 +87,7 @@ export const tripDetailsSchema = z.object({
 
 export const routeDetailsSchema = z.object({
     price: z.number().positive(),
-    routes: z.array(z.string()).min(1),
+    route: z.string(),
 });
 
 export const driverRegistrationSchema = z.object({
@@ -141,13 +142,14 @@ export interface IUser {
     emailVerifiedAt: Date | null;
     passwordResetToken: string | null;
     passwordResetTokenExpiryDate: Date | null;
+    rating: number;
     location: Location;
+    userType: UserType;
 }
 
 export interface IDriver {
     _id: mongoose.Types.ObjectId;
     user: mongoose.Types.ObjectId;
-    rating: number;
     service: mongoose.Types.ObjectId;
     profile?: IProfile;
 }
@@ -166,6 +168,11 @@ export interface IBusPersonalInformation {
     companyLogo: string;
 }
 
+export interface ILocalRidePersonalInformation {
+    localRideType: mongoose.Types.ObjectId;
+    profilePhotoUrl: string;
+}
+
 export interface IVehicleDocuments {
     license: string;
     display: string;
@@ -181,11 +188,11 @@ export interface IVehicleDocuments {
 export interface IProfile {
     carPersonalInformation: ICarPersonalInformation;
     busPersonalInformation: IBusPersonalInformation;
+    localRidePersonalInformation: ILocalRidePersonalInformation;
     paymentDetails: IPaymentDetails;
     vehicleDocuments: IVehicleDocuments;
     tripDetails: ITripDetails[];
     routeDetails: IRouteDetails[];
-    profilePhotoUrl?: string;
     inspectionUrl?: string;
 }
 

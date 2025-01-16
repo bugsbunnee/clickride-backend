@@ -99,7 +99,12 @@ router.put('/local/personal-information', [authDriver, validateService(ServiceCo
     }
 
     const driver = await Driver.findByIdAndUpdate(req.driver!._id, {
-        $set: { 'profile.profilePhotoUrl': validation.fileUrl }
+        $set: { 
+            'profile.localRidePersonalInformation': {
+                profilePhotoUrl: validation.fileUrl,
+                localRideType: req.body.localRideType,
+            },
+        },
     }, { new: true, populate: 'service' }).lean();
 
     if (!driver) {
@@ -256,12 +261,12 @@ router.put('/trip-details', [authDriver, validateService(ServiceCode.BUS), valid
 
 router.put('/route-details', [authDriver, validateService(ServiceCode.LOCAL), validateWith(routeDetailsSchema)], async (req: Request, res: Response): Promise<any> => {
     const driver = await Driver.findByIdAndUpdate(req.driver!._id, {
-        $set: {
+        $push: {
             'profile.routeDetails': {
-                routes: _.uniq(req.body.routes),
+                route: req.body.route,
                 price: req.body.price
-            }
-        }
+            },
+        },
     }, { new: true, populate: 'service' }).lean();
 
     if (!driver) {

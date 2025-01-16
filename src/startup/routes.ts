@@ -6,6 +6,7 @@ import express, { Express } from "express";
 import auth from '../routes/auth';
 import geolocation from '../routes/geolocation';
 import locations from '../routes/locations';
+import localRideType from '../routes/localRideType';
 import profile from '../routes/profile';
 import ride from '../routes/ride';
 import seed from '../routes/seed';
@@ -24,6 +25,7 @@ function registerRoutes(app: Express) {
     
     app.use('/api/v1/auth', auth);
     app.use('/api/v1/locations', locations);
+    app.use('/api/v1/local-ride-types', localRideType);
     app.use('/api/v1/profile', profile);
     app.use('/api/v1/geolocation', geolocation);
     app.use('/api/v1/ride', ride);

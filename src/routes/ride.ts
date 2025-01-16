@@ -10,20 +10,20 @@ import _ from 'lodash';
 
 import authUser from '../middleware/authUser';
 import validateWith from '../middleware/validateWith';
+import validateObjectId from '../middleware/validateObjectId';
 
 import { rideSchema } from '../models/ride/types';
 import { Ride } from '../models/ride/schema';
-import { Driver, User } from '../models/user/schema';
+import { Driver } from '../models/user/schema';
 
 import { getObjectIdIsValid, parseObjectId } from '../utils/lib';
-import { LocationType, PaymentStatus, RideStatus, ServiceCode } from '../utils/constants';
+import { PaymentStatus, RideStatus, ServiceCode } from '../utils/constants';
 import { RiderForMap } from '../utils/models';
 
 import { getDriverTimeToLocation } from './geolocation';
 import { Service } from '../models/services/schema';
 import { geocodeLocations } from '../services/google';
 import { sendSingleNotification } from '../services/notifications';
-import validateObjectId from '../middleware/validateObjectId';
 
 const router = express.Router();
 
@@ -81,7 +81,7 @@ router.post('/car', [authUser, validateWith(rideSchema)], async (req: Request, r
                     $ifNull: [
                         '$profile.vehicleDocuments.display',
                         '$profile.busPersonalInformation.companyLogo',
-                        '$profile.profilePhotoUrl'
+                        '$profile.localRidePersonalInformation.profilePhotoUrl'
                     ]
                 },
                 coordinates: {
@@ -89,7 +89,7 @@ router.post('/car', [authUser, validateWith(rideSchema)], async (req: Request, r
                     latitude: { $arrayElemAt: ["$user.location.coordinates", 1] },
                 },
                 serviceDisplayImage: '$service.image',
-                rating: '$rating',
+                rating: '$user.rating',
                 price: {
                     $ifNull: [
                         '$profile.routeDetails.price',
@@ -188,7 +188,7 @@ router.get('/track/:id', [authUser, validateObjectId], async (req: Request, res:
                         $ifNull: [
                             '$driver.profile.vehicleDocuments.display',
                             '$driver.profile.busPersonalInformation.companyLogo',
-                            '$driver.profile.profilePhotoUrl'
+                            '$driver.profile.localRidePersonalInformation.profilePhotoUrl'
                         ]
                     },
                     coordinates: {

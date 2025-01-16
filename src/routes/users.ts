@@ -8,7 +8,7 @@ import { deviceTokenSchema, driverRegistrationSchema, locationCoordinatesSchema,
 import { hashPassword } from '../utils/lib';
 import { generateDriverSession, generateUserSession } from '../controllers/user.controller';
 import { Service } from '../models/services/schema';
-import { LocationType } from '../utils/constants';
+import { LocationType, UserType } from '../utils/constants';
 import { uploadStream } from '../services/cloudinary';
 
 import authUser from '../middleware/authUser';
@@ -30,6 +30,7 @@ router.post('/', [validateWith(userRegistrationSchema)], async (req: Request, re
         lastName: result.names[1],
         email: req.body.email,
         password: await hashPassword(req.body.password),
+        userType: UserType.RIDER,
     });
 
     await user.sendVerificationEmail();
@@ -38,58 +39,24 @@ router.post('/', [validateWith(userRegistrationSchema)], async (req: Request, re
 });
 
 router.post('/driver', [validateWith(driverRegistrationSchema)], async (req: Request, res: Response): Promise<any> => {
-    const service = await Service.findById(req.body.service);
-    
+    let service = await Service.findById(req.body.service);
     if (!service) {
         return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid service provided' });
     }
 
-    const results = await Driver.aggregate([
-        {
-            $lookup: {
-                from: 'users',
-                foreignField: '_id',
-                localField: 'user',
-                as: 'user',
-                pipeline: [
-                    { 
-                        $project: {
-                            emailVerificationToken: 0,
-                            emailVerificationTokenExpiryDate: 0,
-                            emailVerifiedAt: 0,
-                            passwordResetToken: 0,
-                            passwordResetTokenExpiryDate: 0,
-                        } 
-                    }
-                ]
-            },
-        },
-        {
-            $unwind: '$user'
-        },
-        {
-            $match: {
-                $or: [
-                    { 'user.email': req.body.email }, 
-                    { 'user.phoneNumber': req.body.phoneNumber }
-                ],
-            }
-        }
-    ]);
-
-    if (results.length > 0) {
-        return res.status(StatusCodes.BAD_REQUEST).json({ message: 'A user with this email or phone number already exists!' });
+    let user = await User.findOne({ $or: [{ email: req.body.email }, { phoneNumber: req.body.phoneNumber }] });
+    if (user) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ message: 'A user with the given email or phone number already exists!' });
     }
 
-    const user = await User.create({
+    user = await User.create({
         email: req.body.email,
         phoneNumber: req.body.phoneNumber,
         city: req.body.city,
         password: await hashPassword(req.body.password)
     });
 
-    const driver = await Driver.create({
-        rating: 0,
+    let driver = await Driver.create({
         service: service._id,
         user: user._id,
     });
