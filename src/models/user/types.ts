@@ -29,6 +29,17 @@ export const locationCoordinatesSchema = z.object({
     longitude: z.number(),
 });
 
+export const availableNearbyRidersSchema = z.object({
+    latitude: z.number(),
+    longitude: z.number(),
+    rideType: z.string().refine((value) => getObjectIdIsValid(value), 'Invalid Ride Type').optional(),
+});
+
+export const localNearbyRidersSchema = z.object({
+    rideType: z.string().refine((value) => getObjectIdIsValid(value), 'Invalid Ride Type').optional(),
+    route: z.string(),
+})
+
 export const deviceTokenSchema = z.object({
     token: z.string(),
 });

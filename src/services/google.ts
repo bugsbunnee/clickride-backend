@@ -33,6 +33,7 @@ interface GeocodeResponse {
             };
         }
     }[];
+    status: 'OK' | 'ERROR'
 }
 
 interface GoogleUserProfile {
