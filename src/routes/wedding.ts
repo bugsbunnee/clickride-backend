@@ -20,7 +20,7 @@ router.post('/', validateWith(rsvpSchema), async (req: Request, res: Response) =
     
     try {
         await sendEmail({
-            to: 'victoriaanuri@gmail.com',
+            to: 'marcel.chukwuma00@gmail.com',
             text: 'New RSVP',
             subject: 'New RSVP',
             react: RSVPEmail(rsvp),
