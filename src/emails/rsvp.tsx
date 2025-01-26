@@ -2,13 +2,13 @@ import * as React from "react";
 import { Body, Container, Head, Heading, Hr, Html, Img, Preview, Section, Text } from "@react-email/components";
 import { IRSVP } from "../models/rsvp/types";
 
-function RSVPEmail({ firstName, lastName, email, attending }: IRSVP) {
+function RSVPEmail({ firstName, lastName, email, attending, favoriteDanceMove, storyName, marriageAdvice, hashtag, figure, favoriteMemory }: IRSVP) {
   return (
     <Html>
       <Head />
       
       <Preview>
-        Painter's Loyalty
+        NEW RSVP FOR MAVI2025
       </Preview>
       
       <Body style={main}>
@@ -16,7 +16,7 @@ function RSVPEmail({ firstName, lastName, email, attending }: IRSVP) {
           <Section style={coverSection}>
             <Section style={imageSection}>
               <Img
-                src={`${process.env.FRONTEND_URL}/icons/logo-white.png`}
+                src='https://mavi-nu.vercel.app/images/mv-logo.jpeg'
                 width="75"
                 height="45"
                 style={image}
@@ -49,6 +49,36 @@ function RSVPEmail({ firstName, lastName, email, attending }: IRSVP) {
                 <Section style={verificationSection}>
                   <Text style={verifyText}>Attending</Text>
                   <Text style={codeText}>{attending}</Text>
+                </Section>
+                
+                <Section style={verificationSection}>
+                  <Text style={verifyText}>Signature Dance Move</Text>
+                  <Text style={codeText}>{favoriteDanceMove}</Text>
+                </Section>
+                
+                <Section style={verificationSection}>
+                  <Text style={verifyText}>Love Story Title</Text>
+                  <Text style={codeText}>{storyName}</Text>
+                </Section>
+                
+                <Section style={verificationSection}>
+                  <Text style={verifyText}>MarriageAdvice</Text>
+                  <Text style={codeText}>{marriageAdvice}</Text>
+                </Section>
+                
+                <Section style={verificationSection}>
+                  <Text style={verifyText}>HASHTAG</Text>
+                  <Text style={hastagText}>{hashtag}</Text>
+                </Section>
+                
+                <Section style={verificationSection}>
+                  <Text style={verifyText}>Historical Plus One</Text>
+                  <Text style={hastagText}>{figure}</Text>
+                </Section>
+                
+                <Section style={verificationSection}>
+                  <Text style={verifyText}>Favorite Memory</Text>
+                  <Text style={hastagText}>{favoriteMemory}</Text>
                 </Section>
               </Section>
             </Section>
@@ -86,7 +116,10 @@ const formDetails = {
   backgroundColor: "#FFFFFF",
   padding: "0.875rem",
   borderRadius: "0.875rem",
-  border: "1px solid #EBEBEB"
+  border: "1px solid #EBEBEB",
+  justifyContent: "center" as const,
+  alignItems: "center" as const,
+  flexDirection: "column" as const,
 }
 
 const heading = {
@@ -95,6 +128,7 @@ const heading = {
     "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
   fontSize: "20px",
   fontWeight: "bold",
+  textAlign: "center" as const, 
   marginBottom: "15px",
 };
 
@@ -119,6 +153,7 @@ const text = {
   fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif",
   fontSize: "14px",
   margin: "24px 0",
+  textAlign: "center" as const, 
 };
 
 const upperSection = { 
@@ -153,11 +188,17 @@ const verificationSection = {
 };
 
 const mainText = { 
-  ...text, marginBottom: "14px" 
+  ...text,
+  marginBottom: "14px",
 };
 
 const cautionText = { 
   ...text, margin: "0px", textAlign: "center" as const 
+};
+
+const hastagText = {
+  ...codeText,
+  textTransform: "uppercase" as const,
 };
 
 export default RSVPEmail;

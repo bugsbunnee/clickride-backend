@@ -18,12 +18,11 @@ import { Driver } from '../models/user/schema';
 
 import { getObjectIdIsValid, parseObjectId } from '../utils/lib';
 import { PaymentStatus, RideStatus, ServiceCode } from '../utils/constants';
-import { RiderForMap } from '../utils/models';
 
 import { getDriverTimeToLocation } from './geolocation';
 import { Service } from '../models/services/schema';
 import { geocodeLocations } from '../services/google';
-import { sendSingleNotification } from '../services/notifications';
+import { sendUserNotification } from '../controllers/user.controller';
 
 const router = express.Router();
 
@@ -88,6 +87,7 @@ router.post('/car', [authUser, validateWith(rideSchema)], async (req: Request, r
                     longitude: { $arrayElemAt: ["$user.location.coordinates", 0] },
                     latitude: { $arrayElemAt: ["$user.location.coordinates", 1] },
                 },
+                service: "$service._id",
                 serviceDisplayImage: '$service.image',
                 rating: '$user.rating',
                 price: {
@@ -110,25 +110,22 @@ router.post('/car', [authUser, validateWith(rideSchema)], async (req: Request, r
         return res.status(StatusCodes.NOT_FOUND).json({ message: 'Driver does not exist!' });
     }
 
-    const driver: RiderForMap = results[0];
     const ride = await Ride.create({
-        driver: driver._id,
+        service: results[0].service,
+        driver: results[0]._id,
         user: req.user!._id,
         from: req.body.from,
         to: req.body!.to,
         paymentStatus: PaymentStatus.PENDING,
         rideStatus: RideStatus.PENDING,
         departureDate: moment().toDate(),
-        price: driver.price,
+        price: results[0].price,
     });
 
-    if (req.user!.deviceToken) {
-        await sendSingleNotification({
-            to: req.user!.deviceToken,
-            title: 'Ride booked successfully!',
-            body: 'Your car ride was booked successfully!',
-        });
-    }
+    await sendUserNotification(req.user!, {
+        title: 'Ride booked successfully!',
+        body: 'Your car ride was booked successfully!',
+    });
 
     res.status(StatusCodes.CREATED).json(ride);
 });
@@ -224,7 +221,7 @@ router.post('/bus', [authUser, validateWith(busBookingSchema)], async (req: Requ
     const price = booking.isRoundTrip ? booking.price / 2 : booking.price;
 
     const ride = await Ride.create({
-        driver: booking._id,
+        driver: bookingDetails.tripDetails.driverId,
         user: req.user!._id,
         from: {
             address: `${booking.originCity}, ${booking.origin}`,
@@ -236,38 +233,53 @@ router.post('/bus', [authUser, validateWith(busBookingSchema)], async (req: Requ
             latitude: 0,
             longitude: 0,
         },
-        seatNumbers: req.body.seatNumbers,
+        bookedSeats: req.body.seatNumbers,
+        service: bookingDetails.tripDetails.service,
         paymentStatus: PaymentStatus.PENDING,
         rideStatus: RideStatus.PENDING, // @ts-ignore
-        busTripId: booking._id,
+        busTripId: bookingDetails.tripDetails.tripId,
         departureDate: moment(req.body.departureDate + ' ' + req.body.departureTime).toDate(),
         price: price * req.body.seatNumbers.length
     });
     
-    if (req.user!.deviceToken) {
-        await sendSingleNotification({
-            to: req.user!.deviceToken,
-            title: 'Trip booked successfully!',
-            body: 'Your bus trip was booked successfully!',
-        });
-    }
+    await sendUserNotification(req.user!, {
+        title: 'Trip booked successfully!',
+        body: 'Your bus trip was booked successfully!',
+    });
 
     res.status(StatusCodes.CREATED).json(ride);
 });
 
 router.get('/me', [authUser], async (req: Request, res: Response): Promise<any> => {
     const rides = await Ride.aggregate([
-        { $match: { user: parseObjectId(req.user!._id.toString()) } },
-        { 
+        { $match: { 
+            user: parseObjectId(req.user!._id.toString()),
+        } },
+        {
             $lookup: {
-                from: 'drivers',
-                localField: 'driver',
-                foreignField: '_id',
-                as: 'driver'
-            },
+                from: "drivers",
+                localField: "driver",
+                foreignField: "_id",
+                as: "driver",
+                pipeline: [
+                    {
+                        $project: {
+                            _id: 1,
+                            user: 1,
+                            profilePicture: {
+                                $ifNull: [
+                                    "$profile.busPersonalInformation.companyLogo",
+                                    "$profile.vehicleDocuments.display",
+                                    "$profile.localRidePersonalInformation.profilePhotoUrl",
+                                ]
+                            },
+                        }
+                    }
+                ]
+            }
         },
         {
-            $unwind: '$driver'
+            $unwind: "$driver",
         },
         { 
             $lookup: {
@@ -291,22 +303,103 @@ router.get('/me', [authUser], async (req: Request, res: Response): Promise<any> 
         {
             $unwind: '$driver.service'
         },
+        { $sort: { createdAt: -1 }}
+    ]);
+
+    res.json(rides);
+});
+
+router.get('/upcoming', [authUser], async (req: Request, res: Response): Promise<any> => {
+    const rides = await Service.aggregate([
         {
-            $project: {
-                _id: '$_id',
-                driver: {
-                    firstName: '$driver.user.firstName',
-                    serviceCode: '$driver.service.code'
-                },
-                from: '$from',
-                to: '$to',
-                rideStatus: '$rideStatus',
-                paymentStatus: '$paymentStatus',
-                price: '$price',
-                createdAt: '$createdAt',
+            $lookup: {
+                from: "rides", // The name of the Ride collection
+                localField: "_id",
+                foreignField: "service",
+                as: "rides",
+                pipeline: [
+                    { 
+                        $match: {
+                            user: parseObjectId(req.user!._id.toString()),
+                            departureDate: { $gte: moment().toDate() },
+                        }
+                    },
+                    {
+                        $lookup: {
+                            from: "drivers", // Join with the Driver collection
+                            localField: "driver",
+                            foreignField: "_id",
+                            as: "driver",
+                            pipeline: [
+                                {
+                                    $project: {
+                                        _id: 1,
+                                        user: 1,
+                                        profilePicture: {
+                                            $ifNull: [
+                                                "$profile.busPersonalInformation.companyLogo",
+                                                "$profile.vehicleDocuments.display",
+                                                "$profile.localRidePersonalInformation.profilePhotoUrl",
+                                            ]
+                                        },
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        $unwind: {
+                            path: "$driver",
+                            preserveNullAndEmptyArrays: true // Include rides without drivers
+                        }
+                    },
+                    { 
+                        $lookup: {
+                            from: 'users',
+                            localField: 'driver.user',
+                            foreignField: '_id',
+                            as: 'driver.user'
+                        },
+                    },
+                    {
+                        $unwind: '$driver.user'
+                    },
+                    {
+                        $project: {
+                            _id: 1,
+                            driver: 1,
+                            user: 1,
+                            paymentStatus: 1,
+                            rideStatus: 1,
+                            from: 1,
+                            to: 1,
+                            bookedSeats: 1,
+                            price: 1,
+                            departureDate: 1
+                        }
+                    }
+                ]
             }
         },
-        { $sort: { createdAt: -1 }}
+        { $sort: { createdAt: -1 } },
+        {
+            $project: {
+                _id: 1,
+                name: 1, 
+                code: 1,
+                totalRides: { $size: "$rides" }, // Count total rides for the service
+                totalRevenue: {
+                    $sum: {
+                        $map: {
+                            input: "$rides",
+                            as: "ride",
+                            in: "$$ride.price"
+                        }
+                    }
+                },
+                rides: 1 // Include the rides array
+            }
+        }
     ]);
 
     res.json(rides);
@@ -384,19 +477,35 @@ router.post('/bus/tickets/query', [validateWith(busTripSchema)], async (req: Req
     res.json(tickets);
 });
 
-const getBookedSeatsInBusTrip = async (tripId: mongoose.Types.ObjectId): Promise<number[]> => {
+const getBusTicketDepartureDateQuery = (departureDate: string) => {
+    const startOfDay = moment(departureDate).startOf('day').toDate();
+    const endOfDay = moment(departureDate).endOf('day').toDate();
+
+    const filters: mongoose.FilterQuery<any> = { 
+        departureDate: { $gte: startOfDay, $lte: endOfDay },
+    };
+    
+    return filters;
+};
+
+const getBookedSeatsInBusTrip = async (tripId: mongoose.Types.ObjectId, departureDate?: string): Promise<number[]> => {
+    const filters: mongoose.FilterQuery<any> = { 
+        busTripId: tripId,
+        ...(departureDate ? getBusTicketDepartureDateQuery(departureDate) : {}),
+    };
+
     const seats = await Ride.aggregate([
-        { $match: { busTripId: tripId } },
-        { $unwind: "$seatNumbers" },
+        { $match: filters },
+        { $unwind: "$bookedSeats" },
         {
             $group: {
-              _id: null,                     
+              _id: null,    
               bookedSeats: { 
-                $push: "$seatNumbers"
+                $push: "$bookedSeats"
               }
             }
         }, 
-        { $project: { _id: 0, bookedSeats: 1 }}
+        { $project: { _id: 0, bookedSeats: 1, departureDate: 1, }}
     ]);
 
     if (seats.length === 0) {
@@ -484,7 +593,7 @@ const getDateFromWeekday = (weekday: number) => {
     let currentWeekday = today.day();
     
     let daysUntilNext = (weekday - currentWeekday + 7) % 7;
-    // if (daysUntilNext === 0) daysUntilNext = 7;
+    if (daysUntilNext === 0) daysUntilNext = 7;
 
     let nextDate = today.add(daysUntilNext, 'day');
     return nextDate.format('YYYY-MM-DD');
@@ -568,8 +677,8 @@ const getAvailableBusTickets = async (filters: Record<string, any>) => {
             ...ticket, 
             details: { 
                 ...ticket.details, 
-                bookedSeats: await getBookedSeatsInBusTrip(ticket.details.ticketId),
-                arrivalTime: moment(fullDepartureDateAndTime).add(location.timeToLocationInSeconds, 'seconds'),
+                bookedSeats: await getBookedSeatsInBusTrip(ticket.details.ticketId, departureDate),
+                arrivalTime: moment(fullDepartureDateAndTime).add(location.timeToLocationInSeconds, 'seconds').toDate(),
                 departureDate,
                 location,
                 coordinates: geometry,
@@ -578,6 +687,9 @@ const getAvailableBusTickets = async (filters: Record<string, any>) => {
     });
 
     tickets = await Promise.all(ticketsPromise);
+    tickets = _.orderBy(tickets, (ticket) => moment(ticket.details.departureDate).toDate(), 'asc');
+
+    console.log(tickets);
 
     return tickets;
 };
@@ -610,6 +722,9 @@ const getBusTripDetailsForBooking = async (tripId: mongoose.Types.ObjectId, para
         { 
             $project: {
                 _id: 1,
+                driverId: '$_id',
+                tripId: '$tripDetails._id',
+                service: "$service",
                 tripDetails: 1,
                 availableSeats: { $subtract: ["$tripDetails.busCapacity", bookedSeats.length] }
             }

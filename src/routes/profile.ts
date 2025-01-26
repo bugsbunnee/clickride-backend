@@ -34,6 +34,7 @@ router.put('/car/personal-information', [authDriver, validateService(ServiceCode
                 gender: req.body.gender,
                 isVehicleOwner: req.body.isVehicleOwner,
                 vehicleManufacturer: req.body.vehicleManufacturer,
+                numberOfSeats: req.body.numberOfSeats,
                 vehicleYear: req.body.vehicleYear,
                 vehicleColor: req.body.vehicleColor,
                 vehicleLicensePlate: req.body.vehicleLicensePlate,

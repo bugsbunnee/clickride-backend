@@ -9,6 +9,7 @@ const LocationSchema = new mongoose.Schema({
 });
 
 const RideSchema = new mongoose.Schema<IRide>({
+    service: { type: mongoose.Schema.ObjectId, ref: 'Service', required: true },
     driver: { type: mongoose.Schema.ObjectId, ref: 'Driver', required: true },
     user: { type: mongoose.Schema.ObjectId, ref: 'User', required: true },
     paymentStatus: { type: String, enum: PAYMENT_STATUS, default: PaymentStatus.PENDING },
@@ -17,7 +18,7 @@ const RideSchema = new mongoose.Schema<IRide>({
     to: LocationSchema,
     busTripId: { type: mongoose.Schema.ObjectId },
     departureDate: { type: Date, required: true },
-    seatNumbers: { type: [Number], default: [] },
+    bookedSeats: [{ type: Number, min: 1 }],
     price: { type: Number },
 }, { timestamps: true });
 

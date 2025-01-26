@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { Gender, GENDER_OPTIONS, MIN_CAR_YEAR, PASSWORD_CHECK_REGEX, UserType } from '../../utils/constants';
 import { getObjectIdIsValid } from '../../utils/lib';
 import { Location } from '../../utils/models';
+import { NotificationParams } from '../notifications/types';
 
 export const emailSchema = z.object({
     email: z.string().email(),
@@ -54,6 +55,7 @@ export const carPersonalInformationSchema = z.object({
     lastName: z.string(),
     gender: z.enum(GENDER_OPTIONS as any),
     isVehicleOwner: z.boolean(),
+    numberOfSeats: z.number().min(2, 'Car capacity must be at least 2. The driver and passenger'),
     vehicleManufacturer: z.string(),
     vehicleYear: z.number().min(MIN_CAR_YEAR, `Vehicle must be at least ${MIN_CAR_YEAR} model`),
     vehicleColor: z.string(),
@@ -168,6 +170,7 @@ export interface IDriver {
 export interface ICarPersonalInformation {
     gender: Gender;
     isVehicleOwner: boolean;
+    numberOfSeats: number;
     vehicleManufacturer: string;
     vehicleYear: number;
     vehicleColor: string;
@@ -214,10 +217,10 @@ export interface IUserMethods {
     sendPasswordResetEmail: () => Promise<void>;
     sendWelcomeEmail: () => Promise<void>;
     sendVerificationEmail: () => Promise<void>;
+    sendNotification: (notificationParams: NotificationParams) => Promise<void>;
     sendRecentLoginEmail: (request: Request) => Promise<void>;
 }
 
-export interface IDriverMethods {
+export interface IDriverMethods {}
 
-}
 

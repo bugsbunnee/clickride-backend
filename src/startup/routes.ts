@@ -8,6 +8,7 @@ import geolocation from '../routes/geolocation';
 import locations from '../routes/locations';
 import localRideType from '../routes/localRideType';
 import profile from '../routes/profile';
+import notifications from '../routes/notifications';
 import ride from '../routes/ride';
 import rsvp from '../routes/wedding';
 import seed from '../routes/seed';
@@ -29,6 +30,7 @@ function registerRoutes(app: Express) {
     app.use('/api/v1/local-ride-types', localRideType);
     app.use('/api/v1/profile', profile);
     app.use('/api/v1/geolocation', geolocation);
+    app.use('/api/v1/notifications', notifications);
     app.use('/api/v1/ride', ride);
     app.use('/api/v1/rsvp', rsvp);
     app.use('/api/v1/seed', seed);

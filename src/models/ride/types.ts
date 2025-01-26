@@ -20,6 +20,7 @@ export const rideSchema = z.object({
 type RidePayload = z.infer<typeof rideSchema>;
 
 export interface IRide extends Omit<RidePayload, 'driver'> {
+    service: mongoose.Types.ObjectId;
     driver: mongoose.Types.ObjectId;
     user: mongoose.Types.ObjectId;
     paymentStatus: PaymentStatus;
@@ -27,5 +28,5 @@ export interface IRide extends Omit<RidePayload, 'driver'> {
     departureDate: Date;
     price: number;
     busTripId?: mongoose.Types.ObjectId;
-    seatNumbers: number[];
+    bookedSeats: number[];
 }

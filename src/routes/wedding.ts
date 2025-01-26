@@ -16,11 +16,17 @@ router.post('/', validateWith(rsvpSchema), async (req: Request, res: Response) =
         lastName: req.body.lastName,
         email: req.body.email,
         attending: req.body.attending,
+        favoriteDanceMove: req.body.favoriteDanceMove,
+        storyName: req.body.storyName,
+        marriageAdvice: req.body.marriageAdvice,
+        hashtag: req.body.hashtag,
+        figure: req.body.figure,
+        favoriteMemory: req.body.favoriteMemory,
     });
     
     try {
         await sendEmail({
-            to: 'marcel.chukwuma00@gmail.com',
+            to: 'vm.chukwuma@gmail.com',
             text: 'New RSVP',
             subject: 'New RSVP',
             react: RSVPEmail(rsvp),

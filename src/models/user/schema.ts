@@ -2,17 +2,20 @@ import mongoose from "mongoose";
 import moment from "moment";
 import _ from "lodash";
 
-import { ICarPersonalInformation, IDriver, IPaymentDetails, IUser, IUserMethods, IProfile, IVehicleDocuments, ITripDetails, IRouteDetails, IBusPersonalInformation, ILocalRidePersonalInformation } from "./types";
+import { Request } from "express";
+import { ICarPersonalInformation, IDriver, IPaymentDetails, IUser, IUserMethods, IProfile, IVehicleDocuments, ITripDetails, IBusPersonalInformation, ILocalRidePersonalInformation } from "./types";
 import { generateRandomCode, generateRandomToken, getRequestIdentificationDetails, signPayload } from "../../utils/lib";
 import { EXPIRY_TIME_IN_MINUTES, GENDER_OPTIONS, LOCATION_TYPES, SAMPLE_SIZES, USER_TYPES, UserType } from "../../utils/constants";
 import { sendEmail } from "../../services/email";
+import { NotificationParams } from "../notifications/types";
+import { sendUserNotification } from "../../controllers/user.controller";
 
+import RecentLoginEmail from '../../emails/recent-login';
 import VerifyEmail from '../../emails/verification';
 import WelcomeEmail from '../../emails/welcome';
 
 import logger from "../../startup/logger";
-import RecentLoginEmail from '../../emails/recent-login';
-import { Request } from "express";
+
 
 interface UserModel extends mongoose.Model<IUser, {}, IUserMethods> {}
 
@@ -38,6 +41,7 @@ const PaymentDetailsSchema = new mongoose.Schema<IPaymentDetails>({
 const CarPersonalInformationSchema = new mongoose.Schema<ICarPersonalInformation>({
     gender: { type: String, enum: GENDER_OPTIONS, required: true },
     isVehicleOwner: { type: Boolean, require: true },
+    numberOfSeats: { type: Number, min: 2, require: true },
     vehicleManufacturer: { type: String, required: true },
     vehicleYear: { type: Number, min: 1990, required: true },
     vehicleColor: { type: String, required: true },
@@ -131,7 +135,7 @@ const DriverSchema = new mongoose.Schema<IDriver>({
 
 UserSchema.index({ location: '2dsphere' });
 
-UserSchema.method('generateAuthToken', function () {
+UserSchema.methods.generateAuthToken = function () {
     return signPayload({
         _id: this._id,
         firstName: this.firstName,
@@ -142,23 +146,23 @@ UserSchema.method('generateAuthToken', function () {
         deviceToken: this.deviceToken,
         location: this.location,
     });
-});
+}
 
-UserSchema.method('generateResetPasswordToken', function () {
+UserSchema.methods.generateResetPasswordToken = function () {
     this.passwordResetToken = generateRandomToken();
     this.passwordResetTokenExpiryDate = moment().add(EXPIRY_TIME_IN_MINUTES.PASSWORD_RESET, 'minutes').toDate();
 
     return this.passwordResetToken;
-});
+}
 
-UserSchema.method('generateEmailVerificationToken', function () {
+UserSchema.methods.generateEmailVerificationToken = function () {
     this.emailVerificationToken = generateRandomCode(6, SAMPLE_SIZES.NUMERIC);
     this.emailVerificationTokenExpiryDate = moment().add(EXPIRY_TIME_IN_MINUTES.VERIFY_ACCOUNT, 'minutes').toDate();
 
     return this.emailVerificationToken;
-});
+};
 
-UserSchema.method('sendWelcomeEmail', async function () {
+UserSchema.methods.sendWelcomeEmail = async function () {
     try {
         await sendEmail({
             to: this.email,
@@ -169,9 +173,9 @@ UserSchema.method('sendWelcomeEmail', async function () {
     } catch (error) {
        logger.error(error);
     }
-});
+};
 
-UserSchema.method('sendVerificationEmail', async function () {
+UserSchema.methods.sendVerificationEmail = async function () {
     const token = this.generateEmailVerificationToken();
 
     try {
@@ -190,9 +194,9 @@ UserSchema.method('sendVerificationEmail', async function () {
     }
 
     await this.save();
-});
+};
 
-UserSchema.method('sendRecentLoginEmail', async function (req: Request) {
+UserSchema.methods.sendRecentLoginEmail = async function (req: Request) {
     this.lastLogin = moment().toDate();
     
     try {
@@ -215,7 +219,11 @@ UserSchema.method('sendRecentLoginEmail', async function (req: Request) {
     }
 
 
-});
+};
+
+UserSchema.methods.sendNotification = async function (params: NotificationParams) {
+   await sendUserNotification(this, params);
+};
 
 export const Driver = mongoose.model<IDriver>('Driver', DriverSchema);
 export const User = mongoose.model<IUser, UserModel>('User', UserSchema);

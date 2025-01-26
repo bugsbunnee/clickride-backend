@@ -6,6 +6,9 @@ import { IService } from "../models/services/types";
 import { DriverSession } from "../utils/models";
 import { USER_FIELDS_TO_EXCLUDE } from "../utils/constants";
 import { signPayload } from "../utils/lib";
+import { NotificationParams } from "../models/notifications/types";
+import { sendSingleNotification } from "../services/notifications";
+import { Notification } from "../models/notifications/schema";
 
 interface DriverSessionParams {
     driver: IDriver;
@@ -47,4 +50,21 @@ export const generateUserSession = (user: IUser) => {
         token: signPayload(authUser),
         account: authUser,
     };
+};
+
+export const sendUserNotification = async (user: IUser, params: NotificationParams) => {
+    if (user.deviceToken) {
+        await sendSingleNotification({
+            to: user.deviceToken,
+            title: params.title,
+            body: params.body,
+        });
+    }
+
+    await Notification.create({
+        title: params.title,
+        body: params.body,
+        userId: user._id,
+        isRead: false,
+    });
 };
