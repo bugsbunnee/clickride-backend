@@ -1,4 +1,6 @@
 import express, { Request, Response } from 'express';
+import { StatusCodes } from 'http-status-codes';
+
 import validateWith from '../middleware/validateWith';
 import logger from '../startup/logger';
 
@@ -8,10 +10,14 @@ import { RSVP } from '../models/rsvp/schema';
 
 import RSVPEmail from '../emails/rsvp';
 
+
 const router = express.Router();
 
-router.post('/', validateWith(rsvpSchema), async (req: Request, res: Response) => {
-    const rsvp = await RSVP.create({
+router.post('/', validateWith(rsvpSchema), async (req: Request, res: Response): Promise<any> => {
+    let rsvp = await RSVP.findOne({ email: req.body.email });
+    if (rsvp) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'We already received your RSVP response.' });
+
+    rsvp = await RSVP.create({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
@@ -26,7 +32,7 @@ router.post('/', validateWith(rsvpSchema), async (req: Request, res: Response) =
     
     try {
         await sendEmail({
-            to: 'vm.chukwuma@gmail.com',
+            to: 'victoriaanuri@gmail.com',
             text: 'New RSVP',
             subject: 'New RSVP',
             react: RSVPEmail(rsvp),
