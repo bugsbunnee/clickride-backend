@@ -61,9 +61,15 @@ router.post('/driver', [validateWith(driverRegistrationSchema)], async (req: Req
         user: user._id,
     });
 
+    let session = generateDriverSession({
+        driver,
+        service,
+        user,
+    });
+    
     await user.sendWelcomeEmail();
 
-    res.status(StatusCodes.CREATED).json(generateDriverSession({ driver, service, user }));
+    res.status(StatusCodes.CREATED).json(session);
 });
 
 router.patch('/driver/location', [authDriver, validateWith(locationCoordinatesSchema)], async (req: Request, res: Response): Promise<any> => {
