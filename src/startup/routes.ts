@@ -9,6 +9,7 @@ import locations from '../routes/locations';
 import localRideType from '../routes/localRideType';
 import profile from '../routes/profile';
 import notifications from '../routes/notifications';
+import payments from '../routes/payments';
 import ride from '../routes/ride';
 import rsvp from '../routes/wedding';
 import seed from '../routes/seed';
@@ -33,6 +34,7 @@ function registerRoutes(app: Express) {
     app.use('/api/v1/notifications', notifications);
     app.use('/api/v1/ride', ride);
     app.use('/api/v1/rsvp', rsvp);
+    app.use('/api/v1/payments', payments);
     app.use('/api/v1/seed', seed);
     app.use('/api/v1/services', services);
     app.use('/api/v1/users', users);

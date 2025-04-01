@@ -2277,3 +2277,116 @@
 {"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
 {"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
 {"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"$clusterTime":{"clusterTime":{"$timestamp":"7482640311684956161"},"signature":{"hash":"XuG+PVhDSUhB2Vwn3fCF0K6xPuI=","keyId":{"high":1730310186,"low":2,"unsigned":false}}},"code":2,"codeName":"BadValue","errorResponse":{"$clusterTime":{"clusterTime":{"$timestamp":"7482640311684956161"},"signature":{"hash":"XuG+PVhDSUhB2Vwn3fCF0K6xPuI=","keyId":{"high":1730310186,"low":2,"unsigned":false}}},"code":2,"codeName":"BadValue","errmsg":"unknown operator: localRideType","ok":0,"operationTime":{"$timestamp":"7482640311684956161"}},"level":"\u001b[31merror\u001b[39m","ok":0,"operationTime":{"$timestamp":"7482640311684956161"},"service":"clickride-log-service"}
+{"$clusterTime":{"clusterTime":{"$timestamp":"7482640320274890756"},"signature":{"hash":"O6LwCGmm0lIPHTn4P9e+Y2fTtE4=","keyId":{"high":1730310186,"low":2,"unsigned":false}}},"code":2,"codeName":"BadValue","errorResponse":{"$clusterTime":{"clusterTime":{"$timestamp":"7482640320274890756"},"signature":{"hash":"O6LwCGmm0lIPHTn4P9e+Y2fTtE4=","keyId":{"high":1730310186,"low":2,"unsigned":false}}},"code":2,"codeName":"BadValue","errmsg":"unknown operator: localRideType","ok":0,"operationTime":{"$timestamp":"7482640320274890756"}},"level":"\u001b[31merror\u001b[39m","ok":0,"operationTime":{"$timestamp":"7482640320274890756"},"service":"clickride-log-service"}
+{"$clusterTime":{"clusterTime":{"$timestamp":"7482640324569858052"},"signature":{"hash":"LFxOYElkT5skPpFi03tLhEWLotM=","keyId":{"high":1730310186,"low":2,"unsigned":false}}},"code":2,"codeName":"BadValue","errorResponse":{"$clusterTime":{"clusterTime":{"$timestamp":"7482640324569858052"},"signature":{"hash":"LFxOYElkT5skPpFi03tLhEWLotM=","keyId":{"high":1730310186,"low":2,"unsigned":false}}},"code":2,"codeName":"BadValue","errmsg":"unknown operator: localRideType","ok":0,"operationTime":{"$timestamp":"7482640324569858052"}},"level":"\u001b[31merror\u001b[39m","ok":0,"operationTime":{"$timestamp":"7482640324569858052"},"service":"clickride-log-service"}
+{"$clusterTime":{"clusterTime":{"$timestamp":"7482640466303778820"},"signature":{"hash":"avLD9zVDng6mwqDhXQ7BL+5/VCo=","keyId":{"high":1730310186,"low":2,"unsigned":false}}},"code":2,"codeName":"BadValue","errorResponse":{"$clusterTime":{"clusterTime":{"$timestamp":"7482640466303778820"},"signature":{"hash":"avLD9zVDng6mwqDhXQ7BL+5/VCo=","keyId":{"high":1730310186,"low":2,"unsigned":false}}},"code":2,"codeName":"BadValue","errmsg":"unknown operator: localRideType","ok":0,"operationTime":{"$timestamp":"7482640466303778820"}},"level":"\u001b[31merror\u001b[39m","ok":0,"operationTime":{"$timestamp":"7482640466303778820"},"service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"code":"ECONNREFUSED","hostname":"_mongodb._tcp.cluster0.x5h1m.mongodb.net","level":"\u001b[31merror\u001b[39m","service":"clickride-log-service","syscall":"querySrv"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"connectionGeneration":0,"level":"\u001b[31merror\u001b[39m","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"code":"ECONNREFUSED","hostname":"_mongodb._tcp.cluster0.x5h1m.mongodb.net","level":"\u001b[31merror\u001b[39m","service":"clickride-log-service","syscall":"querySrv"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"code":"ECONNREFUSED","hostname":"_mongodb._tcp.cluster0.x5h1m.mongodb.net","level":"\u001b[31merror\u001b[39m","service":"clickride-log-service","syscall":"querySrv"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"code":"ECONNREFUSED","hostname":"_mongodb._tcp.cluster0.x5h1m.mongodb.net","level":"\u001b[31merror\u001b[39m","service":"clickride-log-service","syscall":"querySrv"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"code":"ECONNREFUSED","hostname":"_mongodb._tcp.cluster0.x5h1m.mongodb.net","level":"\u001b[31merror\u001b[39m","service":"clickride-log-service","syscall":"querySrv"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"code":"ECONNREFUSED","hostname":"_mongodb._tcp.cluster0.x5h1m.mongodb.net","level":"\u001b[31merror\u001b[39m","service":"clickride-log-service","syscall":"querySrv"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"code":"ECONNREFUSED","hostname":"_mongodb._tcp.cluster0.x5h1m.mongodb.net","level":"\u001b[31merror\u001b[39m","service":"clickride-log-service","syscall":"querySrv"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"code":"ECONNREFUSED","hostname":"_mongodb._tcp.cluster0.x5h1m.mongodb.net","level":"\u001b[31merror\u001b[39m","service":"clickride-log-service","syscall":"querySrv"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Listening on port: 8080","service":"clickride-log-service"}
+{"level":"\u001b[32minfo\u001b[39m","message":"Connected to DB: mongodb+srv://marcelchukwuma00:WhsyqV6QThKhtcR3@cluster0.x5h1m.mongodb.net/clickride-backend","service":"clickride-log-service"}

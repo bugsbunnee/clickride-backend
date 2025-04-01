@@ -1,10 +1,93 @@
 import express, { Request, Response } from 'express';
-import { verifyTransactionSignature } from '../services/paystack';
 import { StatusCodes } from 'http-status-codes';
+import { waitUntil } from '@vercel/functions';
+
+import { createVirtualAccount, DedicatedAccountCreationFailure, DedicatedAccountCreationSuccess, verifyTransactionSignature } from '../services/paystack';
+import { PayStackEvents } from '../utils/constants';
+import { User } from '../models/user/schema';
+import { VirtualAccount } from '../models/virtual-accounts/schema';
+
+import authUser from '../middleware/authUser';
+import logger from '../startup/logger';
 
 const router = express.Router();
 
 router.post('/virtual-account', async (req: Request, res: Response): Promise<any> => {
     const isValid = verifyTransactionSignature(req);
     if (!isValid) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid signature!' });
-})
+
+    switch (req.body.event) {
+        case PayStackEvents.DAA_SUCCCESS:
+            const response: DedicatedAccountCreationSuccess = req.body;
+            waitUntil(storeVirtualAccountDetails(response));
+
+            break;
+        case PayStackEvents.DAA_FAILED:
+            const Response: DedicatedAccountCreationFailure = req.body;
+
+            break;
+        default:
+            break;
+    }
+
+    res.status(StatusCodes.OK).json({ message: 'Event processed successfully.' });
+});
+
+router.post('/account', [authUser], async (req: Request, res: Response): Promise<any> => {
+    const result = await createVirtualAccount(req.user!);
+    if (result.status) return res.status(StatusCodes.OK).json({ message: result.message });
+
+    return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: result.message });
+});
+
+async function storeVirtualAccountDetails(response: DedicatedAccountCreationSuccess) {
+    let user = await User.findOne({ 
+        $or: [
+            { email: response.data.customer.email },
+            { phoneNumber: response.data.customer.phone },
+        ],
+    });
+    
+    if (user) {
+        await VirtualAccount.create({
+            user_id: user._id,
+            is_viewed: false,
+
+            customer_id: response.data.customer.id,
+            customer_code: response.data.customer.customer_code,
+            first_name: response.data.customer.first_name,
+            last_name: response.data.customer.last_name,
+            email: response.data.customer.email,
+            phone: response.data.customer.phone,
+        
+            bank_name: response.data.dedicated_account.bank.name,
+            bank_slug: response.data.dedicated_account.bank.slug,
+            bank_id: response.data.dedicated_account.bank.id,
+        
+            status: response.data.identification.status,
+            assigned: response.data.dedicated_account.assigned,
+            active: response.data.dedicated_account.active,
+            account_name: response.data.dedicated_account.account_name,
+            account_number: response.data.dedicated_account.account_number,
+            account_type: response.data.dedicated_account.assignment.account_type,
+            currency: response.data.dedicated_account.currency,
+            created_at: response.data.dedicated_account.created_at,
+            
+            expired: response.data.dedicated_account.assignment.expired,
+            expired_at: response.data.dedicated_account.assignment.expired_at,
+        });
+
+        await user.sendNotification({
+            title: 'Virtual Account Created Successfully!',
+            body: 'Your wallet has been successfully setup and your virtual account created successfully.'
+        });
+    } else {
+        logger.log({
+            level: 'error',
+            message: 'No associated user account found',
+            account: JSON.stringify(response),
+        });
+    }
+}
+
+export default router;

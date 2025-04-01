@@ -9,6 +9,7 @@ import { signPayload } from "../utils/lib";
 import { NotificationParams } from "../models/notifications/types";
 import { sendSingleNotification } from "../services/notifications";
 import { Notification } from "../models/notifications/schema";
+import { createUserChatToken } from "../services/stream";
 
 interface DriverSessionParams {
     driver: IDriver;
@@ -48,6 +49,7 @@ export const generateUserSession = (user: IUser) => {
     
     return {
         token: signPayload(authUser),
+        chat: createUserChatToken(authUser._id),
         account: authUser,
     };
 };

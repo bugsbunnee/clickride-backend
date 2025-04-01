@@ -1,8 +1,9 @@
 import axios from "axios";
+import _ from "lodash";
 
 import { ICoordinates } from "../models/user/types";
 import { mapCoordsToString } from "../utils/lib";
-import _ from "lodash";
+
 import logger from "../startup/logger";
 
 interface DistanceElement {

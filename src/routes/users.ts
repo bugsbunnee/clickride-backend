@@ -8,7 +8,7 @@ import { deviceTokenSchema, driverRegistrationSchema, locationCoordinatesSchema,
 import { hashPassword } from '../utils/lib';
 import { generateDriverSession, generateUserSession } from '../controllers/user.controller';
 import { Service } from '../models/services/schema';
-import { LocationType, UserType } from '../utils/constants';
+import { LocationType, ServiceCode, UserType } from '../utils/constants';
 import { uploadStream } from '../services/cloudinary';
 
 import authUser from '../middleware/authUser';
@@ -53,7 +53,8 @@ router.post('/driver', [validateWith(driverRegistrationSchema)], async (req: Req
         email: req.body.email,
         phoneNumber: req.body.phoneNumber,
         city: req.body.city,
-        password: await hashPassword(req.body.password)
+        isActive: service.code !== ServiceCode.LOCAL,
+        password: await hashPassword(req.body.password),
     });
 
     let driver = await Driver.create({

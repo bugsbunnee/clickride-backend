@@ -1,3 +1,4 @@
+import axios from 'axios';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
@@ -8,6 +9,10 @@ import { Request } from 'express';
 import { SAMPLE_SIZES } from './constants';
 import { ICoordinates } from '../models/user/types';
 import { getLocationFromIP } from '../services/google';
+
+export const getErrorDetailsFromException = (error: unknown) => {
+    return { status: false, message: axios.isAxiosError(error) ? error.response?.data.message : (error as Error).message };
+};
 
 export const getIPAddress = (req: Request) => {
     return req.ip || req.socket.remoteAddress || req.headers['x-forwarded-for'] as string;

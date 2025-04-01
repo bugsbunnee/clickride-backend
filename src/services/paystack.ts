@@ -3,6 +3,8 @@ import crypto from "crypto";
 
 import { IUser } from "../models/user/types";
 import { Request } from "express";
+import { getErrorDetailsFromException } from "../utils/lib";
+import { PayStackEvents } from "../utils/constants";
 
 enum Providers {
     WEMA = 'wema-bank',
@@ -34,39 +36,6 @@ interface VirtualAccountProviders {
 interface AccountCreationResponse {
     status: boolean;
     message: string;
-    data: {
-        bank: {
-          name: string;
-          id: number;
-          slug: string;
-        },
-        account_name: string;
-        account_number: string;
-        assigned: boolean;
-        currency: string;
-        metadata: null,
-        active: boolean;
-        id: number;
-        created_at: string;
-        updated_at: string;
-        assignment: {
-          integration: number;
-          assignee_id: number;
-          assignee_type: string;
-          expired: false,
-          account_type: string;
-          assigned_at: string;
-        },
-        customer: {
-          id: number;
-          first_name: string;
-          last_name: string;
-          email: string;
-          customer_code: string;
-          phone: string;
-          risk_action: string;
-        }
-    }
 }
 
 interface CustomerCreationResponse {
@@ -81,6 +50,72 @@ interface CustomerCreationResponse {
         identified:  boolean;
         createdAt:  string;
         updatedAt:  string;
+    }
+}
+
+export interface DedicatedAccountCreationSuccess {
+    event: PayStackEvents.DAA_SUCCCESS;
+    data: {
+        customer: {
+            id: number;
+            first_name: string;
+            last_name: string;
+            email: string;
+            customer_code: string;
+            phone: string;
+            metadata: object;
+            risk_action: string;
+            international_format_phone: string;
+        },
+        dedicated_account: {
+            bank: {
+                name: string;
+                id: number;
+                slug: string;
+            },
+            account_name: string;
+            account_number: string;
+            assigned: boolean;
+            currency: string;
+            metadata: null;
+            active: boolean;
+            id: number;
+            created_at: string;
+            updated_at: string;
+            assignment: {
+                integration: number;
+                assignee_id: number;
+                assignee_type: string;
+                expired: boolean;
+                account_type: string;
+                assigned_at: string;
+                expired_at: null
+            }
+        },
+        identification: {
+            status: 'success'
+        }
+    }
+}
+
+export interface DedicatedAccountCreationFailure {
+    event: PayStackEvents.DAA_FAILED,
+    data: {
+        customer: {
+          id: number;
+          first_name: string;
+          last_name: string;
+          email: string;
+          customer_code: string;
+          phone: string;
+          metadata: object;
+          risk_action: string;
+          international_format_phone: string;
+        },
+        dedicated_account: null;
+        identification: {
+          status: 'failed';
+        }
     }
 }
 
@@ -105,7 +140,7 @@ export const createCustomer = async (user: IUser) => {
 
         return response.data;
     } catch (error) {
-        
+        return getErrorDetailsFromException(error);
     }
 };
 
@@ -118,8 +153,8 @@ export const createVirtualAccount = async (user: IUser) => {
     };
 
     const data = {
-        firstName: user.firstName,
-        lastName: user.lastName,
+        first_name: user.firstName,
+        last_name: user.lastName,
         phone: user.phoneNumber,
         email: user.email,
         country: Country.NIGERIA,
@@ -132,7 +167,7 @@ export const createVirtualAccount = async (user: IUser) => {
         
         return response.data;
     } catch (error) {
-        return null;
+        return getErrorDetailsFromException(error);
     }
 };
 

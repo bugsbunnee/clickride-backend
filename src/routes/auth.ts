@@ -5,7 +5,7 @@ import moment from 'moment';
 
 import { StatusCodes } from 'http-status-codes';
 import { Driver, User } from '../models/user/schema';
-import { authSchema, deviceTokenSchema, verifyEmailJoiSchema } from '../models/user/types';
+import { authSchema, deviceTokenSchema, forgotPasswordSchema, resetPasswordSchema, verifyEmailSchema } from '../models/user/types';
 import { generateDriverSession, generateUserSession } from '../controllers/user.controller';
 import { getUserProfileFromToken } from '../services/google';
 import { hashPassword } from '../utils/lib';
@@ -116,7 +116,27 @@ router.post('/resend-verification-email', [validateWith(authSchema), rateLimit(l
     res.json({ message: 'Password reset mail has been sent to the user\'s email if it exists' });
 });
 
-router.post('/verify', [validateWith(verifyEmailJoiSchema), rateLimit(limit)], async (req: Request, res: Response): Promise<any> => {
+router.post('/reset-password', validateWith(resetPasswordSchema), async (req: Request, res: Response): Promise<any> => {
+	const user = await User.findOne({
+        email: req.body.email,
+		passwordResetToken: req.body.token,
+		passwordResetTokenExpiryDate: { $gt: Date.now() },
+	});
+
+	if (!user) {
+		return res.status(404).json({ message: 'The token is invalid or has expired!' });
+	}
+
+	user.password = await hashPassword(req.body.password);
+	user.passwordResetToken = null;
+	user.passwordResetTokenExpiryDate = null;
+
+	await user.save();
+
+	res.json({ message: 'Password updated successfully! Please login with the new credentials.' });
+});
+
+router.post('/verify', [validateWith(verifyEmailSchema), rateLimit(limit)], async (req: Request, res: Response): Promise<any> => {
     const filter = { 
         email: req.body.email,
         emailVerificationToken: req.body.token, 
@@ -139,6 +159,15 @@ router.post('/verify', [validateWith(verifyEmailJoiSchema), rateLimit(limit)], a
     await user.sendWelcomeEmail();
 
     res.json({ message: 'Email verified successfully!' });
+});
+
+router.post('/forgot-password', [validateWith(forgotPasswordSchema), rateLimit(limit)], async (req: Request, res: Response): Promise<any> => {
+	const user = await User.findOne({ email: req.body.email });
+	if (!user) return res.status(404).json({ message: 'The given user does not exist!' });
+
+	await user.sendPasswordResetEmail();
+
+	res.json({ message: "Password reset instructions have been sent to the provided email." });
 });
 
 export default router;

@@ -50,6 +50,16 @@ export const authSchema = z.object({
     password: z.string(),
 });
 
+export const resetPasswordSchema = z.object({
+    email: z.string().email(),
+    token: z.string(),
+    password: z.string(),
+    confirmPassword: z.string(),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
 export const carPersonalInformationSchema = z.object({
     firstName: z.string(),
     lastName: z.string(),
@@ -128,9 +138,13 @@ export const userUpdateSchema = z.object({
     }),
 });
 
-export const verifyEmailJoiSchema = z.object({
+export const verifyEmailSchema = z.object({
     email: z.string().email(),
     token: z.string(),
+});
+
+export const forgotPasswordSchema = z.object({
+    email: z.string().email(),
 });
 
 export type ICoordinates = z.infer<typeof locationCoordinatesSchema>;
@@ -150,12 +164,14 @@ export interface IUser {
     profilePhoto: string;
     lastLogin: Date | null,
     isEmailVerified: boolean;
+    isActive: boolean;
     emailVerificationToken: string | null;
     emailVerificationTokenExpiryDate: Date | null;
     emailVerifiedAt: Date | null;
     passwordResetToken: string | null;
     passwordResetTokenExpiryDate: Date | null;
     rating: number;
+    virtualAccountCustomerCode: string;
     location: Location;
     userType: UserType;
 }
@@ -212,8 +228,8 @@ export interface IProfile {
 
 export interface IUserMethods {
     generateAuthToken: () => string;
-    generateResetPasswordToken: () => string;
     generateEmailVerificationToken: () => string;
+    generatePasswordResetToken: () => string;
     sendPasswordResetEmail: () => Promise<void>;
     sendWelcomeEmail: () => Promise<void>;
     sendVerificationEmail: () => Promise<void>;

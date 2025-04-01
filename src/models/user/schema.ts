@@ -11,6 +11,7 @@ import { NotificationParams } from "../notifications/types";
 import { sendUserNotification } from "../../controllers/user.controller";
 
 import RecentLoginEmail from '../../emails/recent-login';
+import ResetPasswordEmail from '../../emails/reset-password';
 import VerifyEmail from '../../emails/verification';
 import WelcomeEmail from '../../emails/welcome';
 
@@ -113,12 +114,14 @@ const UserSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     password: { type: String, required: true },
     lastLogin: { type: Date,  default: null },
     profilePhoto: { type: String, required: false },
+    isActive: { type: Boolean, required: false, default: true },
     isEmailVerified: { type: Boolean, default: false },
     emailVerificationToken: { type: String, default: null },
     emailVerificationTokenExpiryDate: { type: Date, default: null },
     emailVerifiedAt: { type: Date, default: null },
     passwordResetToken: { type: String, default: null },
     passwordResetTokenExpiryDate: { type: Date, default: null },
+    virtualAccountCustomerCode: { type: String, required: false },
     userType: { type: String, enum: USER_TYPES, default: UserType.RIDER },
     rating: { type: Number, min: 0, default: 0 },
     location: {
@@ -148,18 +151,18 @@ UserSchema.methods.generateAuthToken = function () {
     });
 }
 
-UserSchema.methods.generateResetPasswordToken = function () {
-    this.passwordResetToken = generateRandomToken();
-    this.passwordResetTokenExpiryDate = moment().add(EXPIRY_TIME_IN_MINUTES.PASSWORD_RESET, 'minutes').toDate();
-
-    return this.passwordResetToken;
-}
-
 UserSchema.methods.generateEmailVerificationToken = function () {
     this.emailVerificationToken = generateRandomCode(6, SAMPLE_SIZES.NUMERIC);
     this.emailVerificationTokenExpiryDate = moment().add(EXPIRY_TIME_IN_MINUTES.VERIFY_ACCOUNT, 'minutes').toDate();
 
     return this.emailVerificationToken;
+};
+
+UserSchema.methods.generatePasswordResetToken = function () {
+    this.passwordResetToken = generateRandomCode(6, SAMPLE_SIZES.NUMERIC);
+    this.passwordResetTokenExpiryDate = moment().add(EXPIRY_TIME_IN_MINUTES.PASSWORD_RESET, 'minutes').toDate();
+
+    return this.passwordResetToken;
 };
 
 UserSchema.methods.sendWelcomeEmail = async function () {
@@ -195,6 +198,27 @@ UserSchema.methods.sendVerificationEmail = async function () {
 
     await this.save();
 };
+
+UserSchema.methods.sendPasswordResetEmail = async function() {
+    try {
+        const token = this.generatePasswordResetToken()
+        
+        await sendEmail({
+            to: this.email,
+            subject: 'Reset your account password',
+            text: 'Here is your password reset code',
+            react: ResetPasswordEmail({ 
+                verificationCode: token,
+                validityInMinutes: EXPIRY_TIME_IN_MINUTES.PASSWORD_RESET,
+            })
+        });
+    } catch (error) {
+        this.passwordResetToken = null;
+        this.passwordResetTokenExpiryDate = null;
+    }
+
+    await this.save();
+}
 
 UserSchema.methods.sendRecentLoginEmail = async function (req: Request) {
     this.lastLogin = moment().toDate();
