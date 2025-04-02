@@ -17,6 +17,8 @@ router.post('/virtual-account', async (req: Request, res: Response): Promise<any
     const isValid = verifyTransactionSignature(req);
     if (!isValid) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid signature!' });
 
+    logger.info(req.body);
+    
     switch (req.body.event) {
         case PayStackEvents.DAA_SUCCCESS:
             const successResponse: DedicatedAccountCreationSuccess = req.body;
