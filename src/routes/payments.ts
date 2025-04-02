@@ -6,17 +6,15 @@ import { createVirtualAccount, DedicatedAccountCreationFailure, DedicatedAccount
 import { PayStackEvents } from '../utils/constants';
 import { User } from '../models/user/schema';
 import { VirtualAccount } from '../models/virtual-accounts/schema';
+import { generateUserSession } from '../controllers/user.controller';
 
 import authUser from '../middleware/authUser';
 import logger from '../startup/logger';
-import { generateUserSession } from '../controllers/user.controller';
 
 const router = express.Router();
 
 router.post('/virtual-account', async (req: Request, res: Response): Promise<any> => {
     const isValid = verifyTransactionSignature(req);
-    console.log('is valid', isValid);
-    logger.info('is valid', isValid);
     if (!isValid) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid signature!' });
 
     switch (req.body.event) {

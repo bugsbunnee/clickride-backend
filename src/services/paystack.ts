@@ -220,8 +220,5 @@ export const verifyTransactionSignature = (request: Request) => {
     const secret = process.env.PAYSTACK_SECRET_KEY as string;
     const hash = crypto.createHmac('sha512', secret).update(JSON.stringify(request.body)).digest('hex');
 
-    console.log('hash', hash);
-    console.log('signature', request.headers['x-paystack-signature']);
-
     return hash === request.headers['x-paystack-signature'];
 };
