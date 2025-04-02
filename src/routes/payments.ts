@@ -18,12 +18,13 @@ router.post('/virtual-account', async (req: Request, res: Response): Promise<any
 
     switch (req.body.event) {
         case PayStackEvents.DAA_SUCCCESS:
-            const response: DedicatedAccountCreationSuccess = req.body;
-            waitUntil(storeVirtualAccountDetails(response));
+            const successResponse: DedicatedAccountCreationSuccess = req.body;
+            waitUntil(storeVirtualAccountDetails(successResponse));
 
             break;
         case PayStackEvents.DAA_FAILED:
-            const Response: DedicatedAccountCreationFailure = req.body;
+            const failureResponse: DedicatedAccountCreationFailure = req.body;
+            waitUntil(notifyUserOfFailure(failureResponse));
 
             break;
         default:
@@ -37,16 +38,20 @@ router.post('/account', [authUser], async (req: Request, res: Response): Promise
     const result = await createVirtualAccount(req.user!);
     if (result.status) return res.status(StatusCodes.OK).json({ message: result.message });
 
+    await User.findOneAndUpdate(req.user!._id, {
+        isVirtualAccountPending: true,
+    });
+
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: result.message });
 });
 
 async function storeVirtualAccountDetails(response: DedicatedAccountCreationSuccess) {
-    let user = await User.findOne({ 
+    let user = await User.findOneAndUpdate({ 
         $or: [
             { email: response.data.customer.email },
             { phoneNumber: response.data.customer.phone },
         ],
-    });
+    }, { isVirtualAccountPending: false });
     
     if (user) {
         await VirtualAccount.create({
@@ -63,7 +68,6 @@ async function storeVirtualAccountDetails(response: DedicatedAccountCreationSucc
             bank_name: response.data.dedicated_account.bank.name,
             bank_slug: response.data.dedicated_account.bank.slug,
             bank_id: response.data.dedicated_account.bank.id,
-        
             status: response.data.identification.status,
             assigned: response.data.dedicated_account.assigned,
             active: response.data.dedicated_account.active,
@@ -72,14 +76,48 @@ async function storeVirtualAccountDetails(response: DedicatedAccountCreationSucc
             account_type: response.data.dedicated_account.assignment.account_type,
             currency: response.data.dedicated_account.currency,
             created_at: response.data.dedicated_account.created_at,
-            
             expired: response.data.dedicated_account.assignment.expired,
             expired_at: response.data.dedicated_account.assignment.expired_at,
         });
-
+        
         await user.sendNotification({
             title: 'Virtual Account Created Successfully!',
             body: 'Your wallet has been successfully setup and your virtual account created successfully.'
+        });
+    } else {
+        logger.log({
+            level: 'error',
+            message: 'No associated user account found',
+            account: JSON.stringify(response),
+        });
+    }
+}
+
+async function notifyUserOfFailure(response: DedicatedAccountCreationFailure) {
+    let user = await User.findOneAndUpdate({ 
+        $or: [
+            { email: response.data.customer.email },
+            { phoneNumber: response.data.customer.phone },
+        ],
+    }, { isVirtualAccountPending: false });
+    
+    if (user) {
+        await VirtualAccount.create({
+            user_id: user._id,
+            is_viewed: true,
+
+            customer_id: response.data.customer.id,
+            customer_code: response.data.customer.customer_code,
+            first_name: response.data.customer.first_name,
+            last_name: response.data.customer.last_name,
+            email: response.data.customer.email,
+            phone: response.data.customer.phone,
+            status: response.data.identification.status,
+        });
+
+        await user.sendNotification({
+            title: 'Virtual Account Not Created!',
+            body: 'An error occured while creating your wallet. Please try again later.'
         });
     } else {
         logger.log({

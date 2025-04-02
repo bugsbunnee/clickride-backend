@@ -121,7 +121,7 @@ const UserSchema = new mongoose.Schema<IUser, UserModel, IUserMethods>({
     emailVerifiedAt: { type: Date, default: null },
     passwordResetToken: { type: String, default: null },
     passwordResetTokenExpiryDate: { type: Date, default: null },
-    virtualAccountCustomerCode: { type: String, required: false },
+    isVirtualAccountPending: { type: Boolean, required: false, default: false },
     userType: { type: String, enum: USER_TYPES, default: UserType.RIDER },
     rating: { type: Number, min: 0, default: 0 },
     location: {

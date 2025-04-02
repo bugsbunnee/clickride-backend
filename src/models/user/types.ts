@@ -171,7 +171,7 @@ export interface IUser {
     passwordResetToken: string | null;
     passwordResetTokenExpiryDate: Date | null;
     rating: number;
-    virtualAccountCustomerCode: string;
+    isVirtualAccountPending: boolean;
     location: Location;
     userType: UserType;
 }
