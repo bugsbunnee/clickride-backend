@@ -35,7 +35,8 @@ router.post('/', [validateWith(userRegistrationSchema)], async (req: Request, re
 
     await user.sendVerificationEmail();
 
-    res.status(StatusCodes.CREATED).json(generateUserSession(user));
+    let session = await generateUserSession(user);
+    res.status(StatusCodes.CREATED).json(session);
 });
 
 router.post('/driver', [validateWith(driverRegistrationSchema)], async (req: Request, res: Response): Promise<any> => {
@@ -102,7 +103,8 @@ router.patch('/me/token', [authUser, validateWith(deviceTokenSchema)], async (re
         });
     }
 
-    return res.status(StatusCodes.OK).json(generateUserSession(user));
+    let session = await generateUserSession(user);
+    return res.status(StatusCodes.OK).json(session);
 });
 
 router.put('/me/profile', [authUser, upload.single('profilePhoto'), validateWith(userUpdateSchema)], async (req: Request, res: Response): Promise<any> => {
@@ -123,7 +125,8 @@ router.put('/me/profile', [authUser, upload.single('profilePhoto'), validateWith
         return res.status(StatusCodes.BAD_REQUEST).json({ message: 'User not found!' });
     }
 
-    res.json(generateUserSession(user));
+    let session = await generateUserSession(user);
+    res.json(session);
 });
 
 interface UserLocationUpdateParams {

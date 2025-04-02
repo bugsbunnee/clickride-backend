@@ -10,6 +10,7 @@ import { NotificationParams } from "../models/notifications/types";
 import { sendSingleNotification } from "../services/notifications";
 import { Notification } from "../models/notifications/schema";
 import { createUserChatToken } from "../services/stream";
+import { VirtualAccount } from "../models/virtual-accounts/schema";
 
 interface DriverSessionParams {
     driver: IDriver;
@@ -31,7 +32,7 @@ export const generateDriverSession = ({ driver, service, user } : DriverSessionP
     };
 };
 
-export const generateUserSession = (user: IUser) => {
+export const generateUserSession = async (user: IUser) => {
     let authUser = _.pick(user, [
         '_id',
         'firstName',
@@ -47,11 +48,17 @@ export const generateUserSession = (user: IUser) => {
         'emailVerifiedAt',
         'isVirtualAccountPending',
     ]);
+
+    let wallet = await VirtualAccount.findOne({
+        user_id: user._id,
+        active: true,
+    }).lean();
     
     return {
         token: signPayload(authUser),
         chat: createUserChatToken(authUser._id),
         account: authUser,
+        wallet: wallet ? wallet : undefined,
     };
 };
 

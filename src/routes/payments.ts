@@ -10,6 +10,7 @@ import { generateUserSession } from '../controllers/user.controller';
 
 import authUser from '../middleware/authUser';
 import logger from '../startup/logger';
+import validateObjectId from '../middleware/validateObjectId';
 
 const router = express.Router();
 
@@ -47,10 +48,25 @@ router.post('/account', [authUser], async (req: Request, res: Response): Promise
             return res.status(StatusCodes.NOT_FOUND).json({ message: 'An error occurred while setting up your virtual account' });
         }
 
-        return res.status(StatusCodes.OK).json(generateUserSession(user));
+        let session = await generateUserSession(user);
+        return res.status(StatusCodes.OK).json(session);
     }
 
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: result.message });
+});
+
+router.patch('/account/:id', [authUser, validateObjectId], async (req: Request, res: Response): Promise<any> => {
+    const filters = { _id: req.params.id, user_id: req.user!._id };
+    
+    const virtualAccount = await VirtualAccount.findOneAndUpdate(filters, {
+        is_viewed: true,
+    }, { new: true });
+
+    if (!virtualAccount) {
+        return res.status(StatusCodes.NOT_FOUND).json({ message: 'Invalid virtual account provided!' });
+    }
+
+    res.json(virtualAccount);
 });
 
 async function storeVirtualAccountDetails(response: DedicatedAccountCreationSuccess) {
@@ -59,7 +75,7 @@ async function storeVirtualAccountDetails(response: DedicatedAccountCreationSucc
             { email: response.data.customer.email },
             { phoneNumber: response.data.customer.phone },
         ],
-    }, { isVirtualAccountPending: false });
+    }, { isVirtualAccountPending: false }, { new: true });
     
     if (user) {
         await VirtualAccount.create({
@@ -107,7 +123,7 @@ async function notifyUserOfFailure(response: DedicatedAccountCreationFailure) {
             { email: response.data.customer.email },
             { phoneNumber: response.data.customer.phone },
         ],
-    }, { isVirtualAccountPending: false });
+    }, { isVirtualAccountPending: false }, { new: true });
     
     if (user) {
         await VirtualAccount.create({

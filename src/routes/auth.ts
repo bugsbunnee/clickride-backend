@@ -80,8 +80,9 @@ router.post('/login', [validateWith(authSchema)], async (req: Request, res: Resp
     if (!validPassword) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid credentials.' });
 
     await user.sendRecentLoginEmail(req);
-
-    res.json(generateUserSession(user));
+    
+    let session = await generateUserSession(user);
+    res.json(session);
 });
 
 router.post('/google', [validateWith(deviceTokenSchema)], async (req: Request, res: Response): Promise<any> => {
@@ -103,7 +104,8 @@ router.post('/google', [validateWith(deviceTokenSchema)], async (req: Request, r
         await user.sendWelcomeEmail();
     }
 
-    return res.json(generateUserSession(user));
+    let session = await generateUserSession(user);
+    return res.json(session);
 });
 
 router.post('/resend-verification-email', [validateWith(authSchema), rateLimit(limit)], async (req: Request, res: Response): Promise<any> => {

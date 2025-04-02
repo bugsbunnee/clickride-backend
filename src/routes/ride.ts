@@ -131,7 +131,6 @@ router.post('/car', [authUser, validateWith(rideSchema)], async (req: Request, r
 });
 
 router.get('/track/:id', [authUser, validateObjectId], async (req: Request, res: Response): Promise<any> => {
-    console.log(req.params)
     let results = await Ride.aggregate([
         { 
             $match: {
@@ -266,6 +265,7 @@ router.get('/me', [authUser], async (req: Request, res: Response): Promise<any> 
                         $project: {
                             _id: 1,
                             user: 1,
+                            service: 1,
                             profilePicture: {
                                 $ifNull: [
                                     "$profile.busPersonalInformation.companyLogo",
@@ -688,8 +688,6 @@ const getAvailableBusTickets = async (filters: Record<string, any>) => {
 
     tickets = await Promise.all(ticketsPromise);
     tickets = _.orderBy(tickets, (ticket) => moment(ticket.details.departureDate).toDate(), 'asc');
-
-    console.log(tickets);
 
     return tickets;
 };
