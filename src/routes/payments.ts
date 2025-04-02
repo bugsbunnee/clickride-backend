@@ -9,11 +9,14 @@ import { VirtualAccount } from '../models/virtual-accounts/schema';
 
 import authUser from '../middleware/authUser';
 import logger from '../startup/logger';
+import { generateUserSession } from '../controllers/user.controller';
 
 const router = express.Router();
 
 router.post('/virtual-account', async (req: Request, res: Response): Promise<any> => {
     const isValid = verifyTransactionSignature(req);
+    console.log('is valid', isValid);
+    logger.info('is valid', isValid);
     if (!isValid) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid signature!' });
 
     switch (req.body.event) {
@@ -36,11 +39,18 @@ router.post('/virtual-account', async (req: Request, res: Response): Promise<any
 
 router.post('/account', [authUser], async (req: Request, res: Response): Promise<any> => {
     const result = await createVirtualAccount(req.user!);
-    if (result.status) return res.status(StatusCodes.OK).json({ message: result.message });
+    
+    if (result.status) {
+        const user = await User.findByIdAndUpdate(req.user!._id, {
+            isVirtualAccountPending: true,
+        }, { new: true });
+    
+        if (!user) {
+            return res.status(StatusCodes.NOT_FOUND).json({ message: 'An error occurred while setting up your virtual account' });
+        }
 
-    await User.findOneAndUpdate(req.user!._id, {
-        isVirtualAccountPending: true,
-    });
+        return res.status(StatusCodes.OK).json(generateUserSession(user));
+    }
 
     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({ message: result.message });
 });

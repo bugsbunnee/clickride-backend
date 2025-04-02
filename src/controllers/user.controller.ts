@@ -44,7 +44,8 @@ export const generateUserSession = (user: IUser) => {
         'email',
         'rating',
         'isEmailVerified',
-        'emailVerifiedAt'
+        'emailVerifiedAt',
+        'isVirtualAccountPending',
     ]);
     
     return {

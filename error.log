@@ -180,3 +180,4 @@
 {"code":"ECONNREFUSED","hostname":"_mongodb._tcp.cluster0.x5h1m.mongodb.net","level":"\u001b[31merror\u001b[39m","service":"clickride-log-service","syscall":"querySrv"}
 {"code":"ECONNREFUSED","hostname":"_mongodb._tcp.cluster0.x5h1m.mongodb.net","level":"\u001b[31merror\u001b[39m","service":"clickride-log-service","syscall":"querySrv"}
 {"code":"ECONNREFUSED","hostname":"_mongodb._tcp.cluster0.x5h1m.mongodb.net","level":"\u001b[31merror\u001b[39m","service":"clickride-log-service","syscall":"querySrv"}
+{"level":"\u001b[31merror\u001b[39m","service":"clickride-log-service"}
