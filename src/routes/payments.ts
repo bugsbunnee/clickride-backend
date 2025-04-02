@@ -18,7 +18,7 @@ router.post('/virtual-account', async (req: Request, res: Response): Promise<any
     if (!isValid) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid signature!' });
 
     logger.info(req.body);
-    
+
     switch (req.body.event) {
         case PayStackEvents.DAA_SUCCCESS:
             const successResponse: DedicatedAccountCreationSuccess = req.body;
@@ -78,7 +78,7 @@ async function storeVirtualAccountDetails(response: DedicatedAccountCreationSucc
             bank_name: response.data.dedicated_account.bank.name,
             bank_slug: response.data.dedicated_account.bank.slug,
             bank_id: response.data.dedicated_account.bank.id,
-            status: response.data.identification.status,
+            status: response.data.identification ? response.data.identification.status : 'success',
             assigned: response.data.dedicated_account.assigned,
             active: response.data.dedicated_account.active,
             account_name: response.data.dedicated_account.account_name,
@@ -122,7 +122,7 @@ async function notifyUserOfFailure(response: DedicatedAccountCreationFailure) {
             last_name: response.data.customer.last_name,
             email: response.data.customer.email,
             phone: response.data.customer.phone,
-            status: response.data.identification.status,
+            status: response.data.identification ? response.data.identification.status : 'failed',
         });
 
         await user.sendNotification({

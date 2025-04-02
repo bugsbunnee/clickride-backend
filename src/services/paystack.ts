@@ -92,7 +92,7 @@ export interface DedicatedAccountCreationSuccess {
                 expired_at: null
             }
         },
-        identification: {
+        identification?: {
             status: 'success'
         }
     }
@@ -113,7 +113,7 @@ export interface DedicatedAccountCreationFailure {
           international_format_phone: string;
         },
         dedicated_account: null;
-        identification: {
+        identification?: {
           status: 'failed';
         }
     }
