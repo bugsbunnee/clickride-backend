@@ -3,6 +3,10 @@ import { IProfile, IUser } from '../models/user/types';
 import { IService } from '../models/services/types';
 import { LocationType } from './constants';
 
+export enum Currency {
+    NGN = 'NGN',
+}
+
 export interface DriverSession {
     _id: mongoose.Types.ObjectId;
     service: IService;

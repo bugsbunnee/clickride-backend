@@ -4,6 +4,7 @@ import helmet from "helmet";
 import express, { Express } from "express";
 
 import auth from '../routes/auth';
+import admin from '../routes/admin';
 import geolocation from '../routes/geolocation';
 import locations from '../routes/locations';
 import localRideType from '../routes/localRideType';
@@ -27,6 +28,7 @@ function registerRoutes(app: Express) {
     app.use(express.static('public'));
     
     app.use('/api/v1/auth', auth);
+    app.use('/api/v1/admin', admin);
     app.use('/api/v1/locations', locations);
     app.use('/api/v1/local-ride-types', localRideType);
     app.use('/api/v1/profile', profile);

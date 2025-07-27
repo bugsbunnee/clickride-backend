@@ -9,9 +9,27 @@ import { Request } from 'express';
 import { SAMPLE_SIZES } from './constants';
 import { ICoordinates } from '../models/user/types';
 import { getLocationFromIP } from '../services/google';
+import { Currency } from './models';
+
+export const formatAmount = (amount: number, currency?: Currency) => {
+    const formattedAmount = new Intl.NumberFormat('en-US', { 
+        style: currency ? 'currency' : 'decimal',
+        currency,
+    }).format(amount);
+
+    return formattedAmount;
+};
+
 
 export const getErrorDetailsFromException = (error: unknown) => {
     return { status: false, message: axios.isAxiosError(error) ? error.response?.data.message : (error as Error).message };
+};
+
+export const getFirstAndLastNames = (name: string) => {
+    let names = name.split(' ');
+    if (names.length < 2) return { status: false, message: 'Name must include first and last name!', names };
+
+    return { status: true, message: 'Name must include first and last name!', names };
 };
 
 export const getIPAddress = (req: Request) => {

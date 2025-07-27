@@ -32,6 +32,24 @@ export const generateDriverSession = ({ driver, service, user } : DriverSessionP
     };
 };
 
+export const generateAdminSession = async (user: IUser) => {
+    let authUser = _.pick(user, [
+        '_id',
+        'firstName',
+        'lastName',
+        'phoneNumber',
+        'userType',
+        'email',
+        'isEmailVerified',
+        'emailVerifiedAt',
+    ]);
+
+    return {
+        token: signPayload(authUser),
+        user: authUser,
+    };
+};
+
 export const generateUserSession = async (user: IUser) => {
     let authUser = _.pick(user, [
         '_id',
@@ -53,7 +71,7 @@ export const generateUserSession = async (user: IUser) => {
         user_id: user._id,
         active: true,
     }).lean();
-    
+
     return {
         token: signPayload(authUser),
         chat: createUserChatToken(authUser._id),

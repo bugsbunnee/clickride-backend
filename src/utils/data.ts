@@ -21,4 +21,5 @@ export const services: PickerOption[] = [
 
 export const CLIKRIDE_LOGO = 'https://res.cloudinary.com/dgdu2dyce/image/upload/v1736540494/clickride/wgevkfyhnuch8nnjnftr.png';
 export const CLIKRIDE_BASE_URL = 'https://clikride.com';
+export const CLIKRIDE_ADMIN = 'https://clikride.com/admin';
 export const AVAILABLE_SERVICE_TYPES = services.map((service) => service.value);

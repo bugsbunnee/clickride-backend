@@ -10,6 +10,7 @@ import { sendEmail } from "../../services/email";
 import { NotificationParams } from "../notifications/types";
 import { sendUserNotification } from "../../controllers/user.controller";
 
+import AdminWelcomeEmail from '../../emails/admin-welcome';
 import RecentLoginEmail from '../../emails/recent-login';
 import ResetPasswordEmail from '../../emails/reset-password';
 import VerifyEmail from '../../emails/verification';
@@ -189,6 +190,27 @@ UserSchema.methods.sendVerificationEmail = async function () {
             react: VerifyEmail({ 
                 verificationCode: token,
                 validityInMinutes: EXPIRY_TIME_IN_MINUTES.VERIFY_ACCOUNT,
+            })
+        });
+    } catch (error) {
+        this.emailVerificationToken = null;
+        this.emailVerificationTokenExpiryDate = null;
+    }
+
+    await this.save();
+};
+
+UserSchema.methods.sendAdminVerificationEmail = async function (code: string) {
+    const token = this.generateEmailVerificationToken();
+
+    try {
+        await sendEmail({
+            to: this.email,
+            subject: 'Verify your email',
+            text: 'Verify your ClikRide Email',
+            react: AdminWelcomeEmail({ 
+                firstName: this.firstName,
+                verificationCode: code,
             })
         });
     } catch (error) {

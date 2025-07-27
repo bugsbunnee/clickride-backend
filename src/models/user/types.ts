@@ -60,6 +60,15 @@ export const resetPasswordSchema = z.object({
   path: ["confirmPassword"],
 });
 
+export const updatePasswordSchema = z.object({
+    oldPassword: z.string(),
+    newPassword: z.string(),
+    confirmPassword: z.string(),
+}).refine((data) => data.newPassword === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
+});
+
 export const carPersonalInformationSchema = z.object({
     firstName: z.string(),
     lastName: z.string(),
@@ -232,6 +241,7 @@ export interface IUserMethods {
     generatePasswordResetToken: () => string;
     sendPasswordResetEmail: () => Promise<void>;
     sendWelcomeEmail: () => Promise<void>;
+    sendAdminVerificationEmail: (code: string) => Promise<void>;
     sendVerificationEmail: () => Promise<void>;
     sendNotification: (notificationParams: NotificationParams) => Promise<void>;
     sendRecentLoginEmail: (request: Request) => Promise<void>;

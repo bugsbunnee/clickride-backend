@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { StatusCodes } from 'http-status-codes';
 import { Driver, User } from '../models/user/schema';
 import { deviceTokenSchema, driverRegistrationSchema, locationCoordinatesSchema, userRegistrationSchema, userUpdateSchema } from '../models/user/types';
-import { hashPassword } from '../utils/lib';
+import { getFirstAndLastNames, hashPassword } from '../utils/lib';
 import { generateDriverSession, generateUserSession } from '../controllers/user.controller';
 import { Service } from '../models/services/schema';
 import { LocationType, ServiceCode, UserType } from '../utils/constants';
@@ -163,13 +163,6 @@ const uploadProfilePhoto = async (req: Request) => {
     }
 
     return { code: StatusCodes.OK, message: 'Uploaded successfully', status: true, fileUrl: response.secure_url };
-};
-
-const getFirstAndLastNames = (name: string) => {
-    let names = name.split(' ');
-    if (names.length < 2) return { status: false, message: 'Name must include first and last name!', names };
-
-    return { status: true, message: 'Name must include first and last name!', names };
 };
 
 export default router;
