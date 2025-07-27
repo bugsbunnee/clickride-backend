@@ -7,12 +7,13 @@ import { userRegistrationSchema } from '../models/user/types';
 import { ServiceCode, UserType } from '../utils/constants';
 import { getFirstAndLastNames, hashPassword } from '../utils/lib';
 import { generateAdminSession } from '../controllers/user.controller';
-import { getRiders, getTotalRevenue } from '../controllers/admin.controller';
+import { getAdminUsers, getRiders, getTotalRevenue } from '../controllers/admin.controller';
 import { createActivity, getActivitiesForDashboard } from '../controllers/activity.controller';
 
 import adminAuth from '../middleware/admin';
 import authUser from '../middleware/authUser';
 import validateWith from '../middleware/validateWith';
+import validateObjectId from '../middleware/validateObjectId';
 
 const router = express.Router();
 
@@ -36,6 +37,47 @@ router.post('/', [authUser, adminAuth, validateWith(userRegistrationSchema)], as
 
     let session = await generateAdminSession(user);
     res.status(StatusCodes.CREATED).json(session);
+});
+
+router.get('/', [authUser, adminAuth], async (req: Request, res: Response): Promise<any> => {
+   const users = await getAdminUsers();
+   return res.json(users);
+});
+
+router.put('/users/:id/activate', [authUser, adminAuth, validateObjectId], async (req: Request, res: Response): Promise<any> => {
+    let user = await User.findByIdAndUpdate(req.params.id, {
+        $set: {
+            isActive: true,
+        },
+    });
+
+    if (!user) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ message: 'The user with the given ID was not found!' });
+    }
+
+    await createActivity({ user, action: 'Account was activated' });
+
+    return res.json({
+        message: 'Activated successfully!'
+    });
+});
+
+router.put('/users/:id/deactivate', [authUser, adminAuth, validateObjectId], async (req: Request, res: Response): Promise<any> => {
+    let user = await User.findByIdAndUpdate(req.params.id, {
+        $set: {
+            isActive: false,
+        },
+    });
+
+    if (!user) {
+        return res.status(StatusCodes.BAD_REQUEST).json({ message: 'The user with the given ID was not found!' });
+    }
+
+    await createActivity({ user, action: 'Account was deactivated' });
+
+    return res.json({
+        message: 'Deactivated successfully!'
+    })
 });
 
 router.get('/dashboard', [authUser, adminAuth], async (req: Request, res: Response): Promise<any> => {

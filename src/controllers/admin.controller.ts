@@ -2,6 +2,12 @@ import { Ride } from "../models/ride/schema";
 import { User } from "../models/user/schema";
 import { UserType } from "../utils/constants";
 
+export const getAdminUsers = () => {
+    return User
+            .find({ userType: UserType.ADMIN })
+            .select('firstName lastName email isActive lastLogin isEmailVerified phoneNumber profilePhoto');  
+};
+
 export const getRiders = () => {
     return User
             .find({ userType: UserType.RIDER })

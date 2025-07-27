@@ -190,3 +190,4 @@
 {"level":"\u001b[31merror\u001b[39m","service":"clickride-log-service"}
 {"level":"\u001b[31merror\u001b[39m","service":"clickride-log-service"}
 {"level":"\u001b[31merror\u001b[39m","service":"clickride-log-service"}
+{"$clusterTime":{"clusterTime":{"$timestamp":"7531814964214890498"},"signature":{"hash":"HxrAn4KL9W8nh6thpRiaZgkgw7g=","keyId":{"high":1746639679,"low":5,"unsigned":false}}},"code":16410,"codeName":"Location16410","errorResponse":{"$clusterTime":{"clusterTime":{"$timestamp":"7531814964214890498"},"signature":{"hash":"HxrAn4KL9W8nh6thpRiaZgkgw7g=","keyId":{"high":1746639679,"low":5,"unsigned":false}}},"code":16410,"codeName":"Location16410","errmsg":"FieldPath field names may not start with '$'. Consider using $getField or $setField.","ok":0,"operationTime":{"$timestamp":"7531814964214890498"}},"level":"\u001b[31merror\u001b[39m","ok":0,"operationTime":{"$timestamp":"7531814964214890498"},"service":"clickride-log-service"}

@@ -23,6 +23,7 @@ import { getDriverTimeToLocation } from './geolocation';
 import { Service } from '../models/services/schema';
 import { geocodeLocations } from '../services/google';
 import { sendUserNotification } from '../controllers/user.controller';
+import { createActivity } from '../controllers/activity.controller';
 
 const router = express.Router();
 
@@ -127,6 +128,8 @@ router.post('/car', [authUser, validateWith(rideSchema)], async (req: Request, r
         body: 'Your car ride was booked successfully!',
     });
 
+    await createActivity({ user: req.user!, action: 'Booked a car ride' });
+    
     res.status(StatusCodes.CREATED).json(ride);
 });
 
@@ -245,6 +248,8 @@ router.post('/bus', [authUser, validateWith(busBookingSchema)], async (req: Requ
         title: 'Trip booked successfully!',
         body: 'Your bus trip was booked successfully!',
     });
+
+    await createActivity({ user: req.user!, action: 'Booked a bus ride' });
 
     res.status(StatusCodes.CREATED).json(ride);
 });

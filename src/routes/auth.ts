@@ -77,6 +77,7 @@ router.post('/driver/login', [validateWith(authSchema)], async (req: Request, re
 router.post('/admin/login', [validateWith(authSchema)], async (req: Request, res: Response): Promise<any> => {
     let user = await User.findOne({ email: req.body.email, userType: UserType.ADMIN });
     if (!user) return res.status(StatusCodes.NOT_FOUND).json({ message: 'Invalid credentials.' });
+    if (!user.isActive) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Your account is inactive. Kindly contact admin' });
 
     let validPassword = await bcrypt.compare(req.body.password, user.password);
     if (!validPassword) return res.status(StatusCodes.BAD_REQUEST).json({ message: 'Invalid credentials.' });
@@ -157,6 +158,8 @@ router.post('/update-password', [authUser, validateWith(updatePasswordSchema)], 
 
 	user.password = await hashPassword(req.body.newPassword);
 	user = await user.save();
+    await createActivity({ user, action: 'Updated Password' });
+    
     
 	res.json({ message: 'Password updated successfully! Please login with the new credentials.' });
 });
